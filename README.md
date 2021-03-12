@@ -30,16 +30,16 @@ Contract Standard
 -----------------
 
 -   Operator Bond (ETH)
-  -   The amount of ETH that the operator is committing out of 32
+    -   The amount of ETH that the operator is committing out of 32
 
 -   Reward Guarantee (ETH)
-  -   The reward size that the operator is guaranteeing.
-  -   This amount would be some percentage point below what the operator expects to make.
-  -   If the operator fails by exiting early, network non-finality, getting slashed, or too much downtime... the operator bears the entire burden of the guarantee.
-  -   The only way a guarantee will fail to deliver is if the entire withdrawn stake isn't enough to cover it.
+    -   The reward size that the operator is guaranteeing.
+    -   This amount would be some percentage point below what the operator expects to make.
+    -   If the operator fails by exiting early, network non-finality, getting slashed, or too much downtime... the operator bears the entire burden of the guarantee.
+    -   The only way a guarantee will fail to deliver is if the entire withdrawn stake isn't enough to cover it.
 
 -   Expiration Date (YYMMDD)
-  -   The validator stake must be withdrawn by the expiration date or face penalties as described by the Failure to Withdraw Leak Rate.
+    -   The validator stake must be withdrawn by the expiration date or face penalties as described by the Failure to Withdraw Leak Rate.
 
 Contract Notation
 -----------------
@@ -51,7 +51,7 @@ Cryptoeconomics
 ---------------
 
 -   Failure to Withdraw Leak
-  -   Additional reward rights are given to NFT from the Operator's portion of the rewards for each block that the operator is late exiting.
+    -   Additional reward rights are given to NFT from the Operator's portion of the rewards for each block that the operator is late exiting.
 
 Scenarios
 ---------
@@ -63,14 +63,12 @@ Ecosystem Expansion
 ===================
 
 1.  **Dedicated Marketplace dApp**
-
-  1.  A dedicated marketplace for Validator Contract NFTs is necessary for demand transparency.
+    1.  A dedicated marketplace for Validator Contract NFTs is necessary for demand transparency.
 
 3.  **Tokenization via crypto-ETF**
-
-  1.  Supports a market for low-bond contracts by diluting the risk associated with them.
-  2.  Allows casual investors to participate without needing to actively manage Ivory NFTs.
-  3.  Token redemption and minting are solvable but outside the scope of this document. 
+    1.  Supports a market for low-bond contracts by diluting the risk associated with them.
+    2.  Allows casual investors to participate without needing to actively manage Ivory NFTs.
+    3.  Token redemption and minting are solvable but outside the scope of this document. 
 
 Funding
 =======
@@ -87,8 +85,8 @@ Hosted Website
 -   [P0] **Link to dApp**
 -   [P0] **Documentation**
 
-  -   Vision/Mission
-  -   How it works
+    -   Vision/Mission
+    -   How it works
 
 -   [P0] **Social Links**
 
@@ -96,34 +94,34 @@ IPFS dApp
 =========
 
 -   [P0] **Dashboard**
-  -   ETH Balance
-    -   Deposit
-    -   Withdraw
-  -   Active Validator Contracts *(maybe only visible to people who have identified themselves as operators somehow?)*
-    -   Value, Expiration, Validator link
-    -   Trigger Withdrawal
-    -   Create New Validator Contract
-      -   Mirror of the official Ethereum deposit introduction
-      -   Define terms, upload deposit.json, commit stake
-  -   NFT Balances
-    -   Value, Expiration, Validator link
-    -   Trigger Withdrawal
-    -   Burn for ETH
+    -   ETH Balance
+        -   Deposit
+        -   Withdraw
+    -   Active Validator Contracts *(maybe only visible to people who have identified themselves as operators somehow?)*
+        -   Value, Expiration, Validator link
+        -   Trigger Withdrawal
+        -   Create New Validator Contract
+            -   Mirror of the official Ethereum deposit introduction
+            -   Define terms, upload deposit.json, commit stake
+    -   NFT Balances
+        -   Value, Expiration, Validator link
+        -   Trigger Withdrawal
+        -   Burn for ETH
 
 -   [P1] **Order Book**
-  -   Visualizer
-  -   Buy NFTs
-    -   Fill existing sell orders
-    -   Create new buy orders
-  -   Sell NFTs
-    -   Fill existing buy orders
-    -   Create new sell orders
+    -   Visualizer
+    -   Buy NFTs
+        -   Fill existing sell orders
+        -   Create new buy orders
+    -   Sell NFTs
+        -   Fill existing buy orders
+        -   Create new sell orders
 
 -   [P2]** ETF Token **(separate dApp, requires oracle/node/DAO)
-  -   Validator Contract Terms distribution
-  -   Token Value
-  -   Mint Instantly
-    -   Auto-generates buy orders owned by ETF if no burn-orders are active.
-  -   Create burn order
-    -   Allocates ETH from Burns to orders until filled
-    -   Allocates ETH from Mints to orders until filled
+    -   Validator Contract Terms distribution
+    -   Token Value
+    -   Mint Instantly
+        -   Auto-generates buy orders owned by ETF if no burn-orders are active.
+    -   Create burn order
+        -   Allocates ETH from Burns to orders until filled
+        -   Allocates ETH from Mints to orders until filled
