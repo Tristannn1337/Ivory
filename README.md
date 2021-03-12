@@ -117,7 +117,7 @@ IPFS dApp
         -   Fill existing buy orders
         -   Create new sell orders
 
--   [P2]** ETF Token **(separate dApp, requires oracle/node/DAO)
+-   [P2] **ETF Token** (separate dApp, requires oracle/node/DAO)
     -   Validator Contract Terms distribution
     -   Token Value
     -   Mint Instantly
