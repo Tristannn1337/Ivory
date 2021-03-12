@@ -1,8 +1,9 @@
 # The Ivory Protocol
+=======
 Ethereum Staking Validator Contracts
 
 Problem
-=======
+-------------
 
 All existing examples of ETH2.0 Staking Pools involve either dependence on a centralized authority or DAO governance. While neither of these poses an immediate risk, time tends to favor singular solutions and network dominance of either of these types of pools would be devastating. We need a protocol that gives node operators the power to participate in the staking pool market while remaining independent of any larger organization. We need a protocol that, if it were to be used by every single validator in the ecosystem, would not create a challenge to Ethereum's legitimacy. More specifically, we need a protocol that:
 
@@ -16,7 +17,7 @@ All existing examples of ETH2.0 Staking Pools involve either dependence on a cen
 And as a bonus, while this proposal's primary intention is to facilitate contracts between strangers, it can just as easily be used to facilitate contracts between people who know each other.
 
 Proposal: Validator Contract NFTs
-=================================
+-------------
 
 Standardize and facilitate the creation, selling, purchasing, and exercising of contracts between Ethereum Node Operators and Ethereum holders via smart contracts.
 
@@ -61,7 +62,7 @@ Scenarios
 -   Operator fails at their job, the validator is forced to exit, and the Ivory NFT fails to deliver on its reward guarantee. It would take a spectacular failure for this to occur, and the risk can be controlled by only purchasing higher bond Ivory NFTs.
 
 Ecosystem Expansion
-===================
+-------------
 
 1.  **Dedicated Marketplace dApp**
     1.  A dedicated marketplace for Validator Contract NFTs is necessary for demand transparency.
@@ -72,7 +73,7 @@ Ecosystem Expansion
     3.  Token redemption and minting are solvable but outside the scope of this document. 
 
 Funding
-=======
+-------------
 
 -   Implement a small house fee on validator withdrawal.
 -   There is a maximum amount of fees and end date where they are no longer collected and the contract effectively auto-exits-to-the-community.
@@ -80,7 +81,7 @@ Funding
 -   Additional fees can be extracted from the exchange marketplace and possibly the crypto-ETF.
 
 Hosted Website
-==============
+-------------
 
 -   [P0] **Quick Introduction**
 -   [P0] **Link to dApp**
@@ -92,7 +93,7 @@ Hosted Website
 -   [P0] **Social Links**
 
 IPFS dApp
-=========
+-------------
 
 -   [P0] **Dashboard**
     -   ETH Balance
