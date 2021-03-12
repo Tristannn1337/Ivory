@@ -1,5 +1,4 @@
 # The Ivory Protocol
-=======
 Ethereum Staking Validator Contracts
 
 Problem
