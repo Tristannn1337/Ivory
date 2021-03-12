@@ -1,3 +1,5 @@
+![Image of Yaktocat](https://github.com/Tristannn1337/Ivory/blob/main/LogoV1.png)
+
 # The Ivory Protocol
 Ethereum Staking Validator Contracts
 
