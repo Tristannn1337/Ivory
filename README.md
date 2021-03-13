@@ -1,4 +1,4 @@
-![Image of Yaktocat](https://github.com/Tristannn1337/Ivory/blob/main/LogoV1.png)
+![Ivory Protocol](https://github.com/Tristannn1337/Ivory/blob/main/LogoV1.png)
 
 # The Ivory Protocol
 Ethereum Staking Validator Contracts
@@ -6,80 +6,91 @@ Ethereum Staking Validator Contracts
 Problem
 -------------
 
-All existing examples of ETH2.0 Staking Pools involve either dependence on a centralized authority or DAO governance. While neither of these poses an immediate risk, time tends to favor singular solutions and network dominance of either of these types of pools would be devastating. We need a protocol that gives node operators the power to participate in the staking pool market while remaining independent of any larger organization. We need a protocol that, if it were to be used by every single validator in the ecosystem, would not create a challenge to Ethereum's legitimacy. More specifically, we need a protocol that:
+Ethereum needs a pooled staking protocol that, if it were to be used by every single validator in the ecosystem, would not begin to challenge to Ethereum's legitimacy. All existing staking pools involve either a centralized authority or DAO governance, when all we need is a simple protocol that facilitates the market between node operators and ether holders.  More specifically, we need a protocol that:
 
--   Involves minimum trust
+-   Involves minimum possible trust
 -   Is fully decentralized
--   Allows for market-driven risk and rewards
+-   Allows the market to dictate risks and rewards
+-   Facilitates stake liquidity back to ether holders
 -   Facilitates tokenized staking for casual ETH holders
--   Facilitates stake liquidity
--   Does not involve a node operator DAO
 
-And as a bonus, while this proposal's primary intention is to facilitate contracts between strangers, it can just as easily be used to facilitate contracts between people who know each other.
 
-Proposal: Validator Contract NFTs
+Proposal: Validator Contracts
 -------------
 
-Standardize and facilitate the creation, selling, purchasing, and exercising of contracts between Ethereum Node Operators and Ethereum holders via smart contracts.
+Standardize and facilitate the creation, selling, purchasing, and exercising of **Validator Contracts** between Ethereum Node Operators and ether holders through smart contracts.
 
 Example Story
 -------------
 
-A node operator mints a new Validator Contract NFT through the dApp with the terms they desire, a typical staking deposit.json file, and a deposit of 32 ETH that is then forwarded to the formal deposit contract with a withdrawal address pointing to the Ivory Vault. Upon success, the operator possesses a Validator Contract NFT with a token balance of 32 minus their bond. The operator may then sell the NFT tokens to one or more buyers.
+A Node Operator creates a new Validator Contract with the terms they desire, such as the bond they're comitting, the expiration date of the contract, and what the value guarantee is of the contract at expiration. Then, they upload a typical staking deposit.json file and a send deposit of 32 ETH. Upon success, their validator has entered the activation queue and the Node Operator possesses NFT tokens from their Validator Contract that they may sell in the Validator Contract market. Likewise, an ether holder may visit the Validator Contract market, purchasing some with terms they agree to for the price that the contract is selling for.
 
-Fast forward to some time near the expiration date of the contract when the operator exits their validator. Once exited, the operator triggers a withdrawal through the dApp which communicates with the ETH2.0 withdrawal contract to pull the funds into their dApp ETH balance and close the Validator Contract. Later, the Validator Contract NFT holder sees the contract has been closed and burns their NFT balance to withdraw their portion of the stake from the Ivory dApp.
+Fast forward to the expiration date set in the terms of a Validator Contract. The validator bonded to the contract has exited and the operator triggers a withdrawal transaction to pull the validator's balance into the protocol. The Node Operator withdraws their portion of the balance and starts over. Later, as Validator Contract token holders see their funds are available, they exercise their token balance to withdraw their portion.
+
+
+Design Considerations
+-------------
+
+- It seems possible that the final implementation of validator withdrawals may be difficult to link back to validator contracts if the implementation uses a single smart contract with NFTs. If this is the case, the desire to use NFTs will need to be abandoned in favor of deploying unique smart contracts for each validator contract. It probably makes sense to design it this way from the beginning as the safest path forward? 
+
 
 Contract Standard
 -----------------
 
--   Operator Bond (ETH)
+-   **Operator Bond** (ETH)
     -   The amount of ETH that the operator is committing out of 32
 
--   Reward Guarantee (ETH)
+-   **Reward Guarantee** (ETH)
     -   The reward size that the operator is guaranteeing.
     -   This amount would be some percentage point below what the operator expects to make.
     -   If the operator fails by exiting early, network non-finality, getting slashed, or too much downtime... the operator bears the entire burden of the guarantee.
     -   The only way a guarantee will fail to deliver is if the entire withdrawn stake isn't enough to cover it.
 
--   Expiration Date (YYMMDD)
+-   **Expiration Date** (YYMMDD)
     -   The validator stake must be withdrawn by the expiration date or face penalties as described by the Failure to Withdraw Leak Rate.
 
-Contract Notation
------------------
-
--   16S 0.3R E220301 -> 16ETH Stake(16ETH Bond), 0.3 ETH Guaranteed Reward, Expires March 1st, 2022.
--   28S 0.5R E210601 -> 28ETH Stake(4ETH Bond), 0.5 Guaranteed Reward, Expires July 1st, 2021
 
 Cryptoeconomics
 ---------------
 
--   Failure to Withdraw Leak
+-   **Failure to Withdraw Leak**
     -   Additional reward rights are given to NFT from the Operator's portion of the rewards for each block that the operator is late exiting.
 
-Scenarios
+-   **Temporary Development Fee**
+    -   When validators exit and the balance is portioned out to the operator and token holders, a small development fee is taken from the realized profits.
+    -   This fee expires after either a predetermined amount of time has gone by or if a ceiling has been reached for total fees extracted.
+    -   The terms of this fee is subject to change, but currently stands at 0.5% for 30 years or until 100,000 ether has been collected.
+
+
+Worst Case Scenarios
 ---------
 
 -   A validator never exits and keeps validating indefinitely, never releasing funds. No one wins, the operator continues to spend electricity to keep the node validating. Highly unlikely to ever occur.
+
 -   Operator fails at their job, the validator is forced to exit, and the Ivory NFT fails to deliver on its reward guarantee. It would take a spectacular failure for this to occur, and the risk can be controlled by only purchasing higher bond Ivory NFTs.
 
-Ecosystem Expansion
+
+Development Phases
 -------------
 
-1.  **Dedicated Marketplace dApp**
-    1.  A dedicated marketplace for Validator Contract NFTs is necessary for demand transparency.
+1.  **Phase 1 - Validator Contracts**
+    -   Website/dApp
+    -   Simple Smart Contract Wallet
+    -   Base Protocol implementation
 
-3.  **Tokenization via crypto-ETF**
-    1.  Supports a market for low-bond contracts by diluting the risk associated with them.
-    2.  Allows casual investors to participate without needing to actively manage Ivory NFTs.
-    3.  Token redemption and minting are solvable but outside the scope of this document. 
+2.  **Phase 2 - Marketplace**
+    -   A dedicated marketplace built specifically for buying and selling Validator Contracts.
+    -   Necessary for giving ether holders a voice in the market.
+    -   Same standards of trustlessness and decentralization as Phase 1.
+    -   Will likely involve another temporary development fee on transactions.
 
-Funding
--------------
+3.  **Phase 3 - Tokenization via crypto-ETF**
+    -   Supports a larger market for low-bond contracts by diluting the risk associated with them.
+    -   Allows casual investors to passively participate.
+    -   Will require a DAO and Oracle(s).
+    -   Will involve a permanent DAO fee.
+    -   May be better handled by an existing crypto-ETF protocol.
 
--   Implement a small house fee on validator withdrawal.
--   There is a maximum amount of fees and end date where they are no longer collected and the contract effectively auto-exits-to-the-community.
--   Once you're ready with a whitepaper and a website, sell the rights to x percent of the first y amount of ETH that is made in fees. So, maybe sell 60% of the first 200 ETH for 40ETH... or something exponential where the first people who fund you have the biggest incentive while the last people have the smallest. And try to give yourself like... maybe 300k in funding? And a public investment target that will allow you to quit your current job and work on this full time?
--   Additional fees can be extracted from the exchange marketplace and possibly the crypto-ETF.
 
 Hosted Website
 -------------
@@ -92,6 +103,7 @@ Hosted Website
     -   How it works
 
 -   [P0] **Social Links**
+
 
 IPFS dApp
 -------------
