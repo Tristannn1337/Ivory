@@ -11,7 +11,7 @@ contract IvoryMain is IvoryMainInterface {
     uint256 constant LIFETIME_MIN = 4 weeks; //basically the bare minimum
     uint256 constant LIFETIME_MAX = ONE_YEAR * 30; // maybe the upper limit can be a function of time? Say the limit starts at like 1 year, after 1 year it becomes 2, and by the 5th year then 30 year is allowed.
 
-    uint256 constant BOND_MIN = 1 ether;
+    uint256 constant BOND_MIN = 2 ether;
     uint256 constant BOND_MAX = 31 ether;
 
     uint256 constant GUARANTEE_MIN; // (32-bond) + (32-bond) * 0.005 * lifetimeInYears
@@ -37,8 +37,7 @@ contract IvoryMain is IvoryMainInterface {
     uint256 constant DEV_FEE_LIMIT = 100000 ether;
 
 
-    struct ValidatorContract
-    {
+    struct ValidatorContract {
         address operator;
         uint256 bond;
         uint256 guarantee;
@@ -52,7 +51,10 @@ contract IvoryMain is IvoryMainInterface {
     address private _withdrawalCredentials;
     address private _developmentFeeAddress;
 
-    constructor(address developmentFeeAddress) public {
+    constructor(
+        address developmentFeeAddress
+    ) public 
+    {
         _developmentFeeAddress = developmentFeeAddress;
 
         // Generate the Withdrawal Credentials use for all contracts
@@ -75,25 +77,46 @@ contract IvoryMain is IvoryMainInterface {
      * @dev Returns the penalty added onto an operator's withdrawal at `blocksPastExpiration`
      * before withdrawStake is successfully called.
      */
-    function calcLeakAmount(uint256 blocksPastExpiration) external pure view returns (uint256);
+    function calcLeakAmount(
+        uint256 blocksPastExpiration
+    ) external pure view returns (uint256);
 
     /**
      * @dev Calculate the value of any contract with a given set of parameters.
      */
-    function calcContractValue(uint256 bond, uint256 guarantee, uint256 lifetime, uint256 depositBlock, uint256 atBlock) external pure view returns (uint256);
+    function calcContractValue(
+        uint256 bond, 
+        uint256 guarantee, 
+        uint256 lifetime, 
+        uint256 depositBlock, 
+        uint256 atBlock
+    ) external pure view returns (uint256);
 
 
-    function getContractValidator(uint256 contractId) external view returns (address) {
+    function getContractValidator(
+        uint256 contractId
+    ) external view returns (address) 
+    {
         return _contractValidators[contractId];
     }
 
-    function getValidatorContract(address validatorPubkey) external view returns (ValidatorContract) {
+    function getValidatorContract(
+        address validatorPubkey
+    ) external view returns (ValidatorContract) 
+    {
         return _validatorContracts[validatorPubkey];
     }
 
 
     // TODO: Move into interface class
-    event CommitStakeAndMintContract(address validator, uint256 contractId, address indexed from, uint256 bond, uint256 guarantee, uint256 indexed expirationBlock);
+    event CommitStakeAndMintContract(
+        address validator, 
+        uint256 contractId, 
+        address indexed from, 
+        uint256 bond, 
+        uint256 guarantee, 
+        uint256 indexed expirationBlock
+    );
 
     /**
      * @dev Drafts an NFT contract with a `bond` amount of ETH being put up by the operator
@@ -108,7 +131,15 @@ contract IvoryMain is IvoryMainInterface {
      // and use that account balance to pull funds for staking. This allows someone who wants to make a lot of contracts
      // to reduce gas by sending all the ETH they want to use at once. This also allows NFT holders to call the withdraw
      // method where the operator's funds will be sitting in their account.
-    function commitStakeAndMintContract(uint256 bond, uint256 guarantee, uint256 lifetime, bytes calldata validatorPubkey, bytes calldata validatorSignature, bytes32 depositDataRoot) external returns (uint256){
+    function commitStakeAndMintContract(
+        uint256 bond, 
+        uint256 guarantee, 
+        uint256 lifetime, 
+        bytes calldata validatorPubkey, 
+        bytes calldata validatorSignature, 
+        bytes32 depositDataRoot
+    ) external returns (uint256) 
+    {
         require(_validatorContracts[validatorPubkey].operator == address(0x0), "Validator has already been assigned to an existing contract.");
         require(_etherBalance[msg.sender] >= 32 ether, "A balance of at least 32 Ether is required.");
 
@@ -139,6 +170,8 @@ contract IvoryMain is IvoryMainInterface {
      * Anyone can call this method on any contract without limitation, although it will
      * fail if the validator hasn't exited.
      */
-    function withdrawStake(uint256 contractId) external;
+    function withdrawStake(
+        uint256 contractId
+    ) external;
 
 }
