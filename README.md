@@ -1,12 +1,13 @@
 ![Ivory Protocol](https://github.com/Tristannn1337/Ivory/blob/main/LogoV1.png)
 
 # The Ivory Protocol
-Ethereum Staking Validator Contracts
+Ethereum Validator Bond NFTs and Fund Tokens
+
 
 Problem
 -------------
 
-Ethereum needs a pooled staking protocol that, if it were to be used by every single validator in the ecosystem, would not begin to challenge to Ethereum's legitimacy. All existing staking pools involve either a centralized authority or DAO governance, when all we need is a simple protocol that facilitates the market between node operators and ether holders.  More specifically, we need a protocol that:
+Ethereum needs a staking pool protocol that, if it were to be used by every single validator in the ecosystem, would not begin to challenge to Ethereum's legitimacy. All existing staking pools involve either a centralized authority or DAO governance, when all we need is a simple protocol that facilitates the market between node operators and ether holders. Specifically, we need a protocol that:
 
 -   Involves minimum possible trust
 -   Is fully decentralized
@@ -15,46 +16,79 @@ Ethereum needs a pooled staking protocol that, if it were to be used by every si
 -   Facilitates tokenized staking for casual ETH holders
 
 
-Proposal: Validator Contracts
+Proposal: Validator Bond NFTs and Fund Tokens
 -------------
 
-Standardize and facilitate the creation, selling, purchasing, and exercising of **Validator Contracts** between Ethereum Node Operators and ether holders through smart contracts.
+Standardize and facilitate the creation, selling, purchasing, and exercising of **Validator Bonds** between Ethereum Node Operators and ether holders and create a tokenized fund of bonds for the most casual ether holders.
+
 
 Example Story
 -------------
 
-A Node Operator creates a new Validator Contract with the terms they desire, such as the bond they're comitting, the expiration date of the contract, and what the value guarantee is of the contract at expiration. Then, they upload a typical staking deposit.json file and a send deposit of 32 ETH. Upon success, their validator has entered the activation queue and the Node Operator possesses NFT tokens from their Validator Contract that they may sell in the Validator Contract market. Likewise, an ether holder may visit the Validator Contract market, purchasing some with terms they agree to for the price that the contract is selling for.
+A Node Operator creates a new validator bond with the terms they desire(principal, maturity, yield, etc), they upload a typical staking deposit.json file and a send deposit of 32 ETH. This sends their validator into the activation queue and the Node Operator now possesses NFT tokens representing the principal of their bond that they may sell in the market. Likewise, an ether holder visits the validator bond market, finds one with a satisfying quality rating, and purchases either some or all of the principal.
 
-Fast forward to the expiration date set in the terms of a Validator Contract. The validator bonded to the contract has exited and the operator triggers a withdrawal transaction to pull the validator's balance into the protocol. The Node Operator withdraws their portion of the balance and starts over. Later, as Validator Contract token holders see their funds are available, they exercise their token balance to withdraw their portion.
+Fast forward to the bond maturity date, the bonded validator has exited and the operator triggers a withdrawal transaction to pull the validator's balance into the protocol. The Node Operator withdraws their portion of the balance and starts over. Later, as bond rights holders see their funds are available, they exercise their rights to withdraw their portion of the balance.
+
+In the background, there is a pool watching for high quality bonds and buying them as well as exercising rights to any that are ready. More casual investors are depositing funds into this pool in exchange for pool tokens and letting it's automatic purchasing and exercising do the hard work for them, knowing that they can submit an order at any time to redeem their pool tokens to collect back their deposit and yield.
+
+
+# Phase 1 - Bond Marketplace
+
+-   Website/dApp.
+-   Simple Smart Contract Wallet.
+-   Base Protocol implementation.
+-   A dedicated marketplace built specifically for buying and selling Validator Contracts.
+-   Necessary for giving ether holders a voice in the market.
+-   Will likely involve another temporary development fee on transactions.
+-   Notification system for when tokens can be exercised.
 
 
 Contract Standard
 -----------------
 
--   **Operator Bond** (ETH)
-    -   The amount of ETH that the operator is committing out of 32
+-   **Principal** (ETH)
+    -   The amount of ETH that the operator is raising out of 32.
 
--   **Reward Guarantee** (ETH)
-    -   The reward size that the operator is guaranteeing for the tokens.
-    -   This amount would be some percentage point below what the operator expects to make.
-    -   If the operator fails by exiting early, network non-finality, getting slashed, or too much downtime... the operator bears the entire burden of the guarantee.
-    -   The only way a guarantee will fail to deliver is if the entire withdrawn stake isn't enough to cover it.
+-   **Maturity** (Block)
+    -   The block that the operator is comitting to withdrawing the validator balance by.
+    -   Enforced by a **Late Withdrawal Penalty** and a **Early Withdrawal Penalty** described in the cryptoeconomics section.
 
--   **Expiration Date** (YYMMDD)
-    -   The validator stake must be withdrawn by the expiration date or face penalties as described by the Failure to Withdraw Leak Rate.
+-   **Annualized Yield** (%)
+    -   The yield operator expects from the network, discounted by their comission rate, and guaranteed to the bond holder.
+
+-   **Penalty Multiplier** (%)
+    -   The yield multiplier applied to determine pentalty rates for withdrawing early or late.
+    -   Allows operators to adjust risk propositions and justify different comission rates.
+
+-   **Grace Period** (Blocks)
+    -   Number of days before and after the maturity block when an operator may withdraw without penalty.
+
+-   **Qualtiy Rating** (Score)
+    -   A value given to a bond to make the buying process easier (and for sorting???)
+    -   Possibly calculated only on the front end, and not in-contract... unless useful for sorting...
+    -   Facilitate fund autonomy???
+    -   **TODO: calculation**
 
 
 Cryptoeconomics
 ---------------
 
--   **Failure to Withdraw Leak**
-    -   Additional reward rights are given to NFT from the Operator's portion of the rewards for each block that the operator is late exiting.
+-   **Late Withdrawal Penalty**
+    -   If a validator balance is withdrawn past the maturity block, a penalty is calculated based on the number of blocks that have past since the maturity block.
+    -   The intent is that the penalty would start negligibly low and increase over time, consuming any additional operator profit being earned within a few days, and start cutting into the operator's profits within a week.
+    -   Calculated by interpolating between yield and multiplied yield over X number of blocks after the grace period.
+        -   Over how many blocks does the yield interpolate? Grace period? So grace period serves two purposes?
+
+-   **Early Withdrawal Penalty**
+    -   If a validator balance is withdrawn before the maturity block, a penalty is calculated based on the number of blocks left until the maturity block.
+    -   The intent is that the penalty would start out at it's highest and lower over time, reducing to nothing within days of the maturity block.
+    -   **TODO: penalty equation** ... maybe an interpolation between either a hardcoded value or a multiple of the contract yield over the number of blocks until maturity, minus 5 days?
 
 -   **Temporary Development Fee on Withdrawal**
     -   When a validator's balance is withdrawn and the balance is portioned out to the operator and token holders, a small development fee may be taken from the realized profits.
     -   These fees expire after either a predetermined amount of time or if a ceiling has been reached for total fees extracted.
     -   The terms of this fee is subject to change, but currently stands at 0.5% for 30 years or until 100,000 ether has been collected.
-    -   This fee is intentionally taken out at withdrawl, not at sale, in order to avoid ever profiting from contracts that fail to deliver.
+    -   This fee is intentionally taken out at withdrawl, not at sale, in order to avoid profit from contracts that fail to deliver.
 
 
 Design Considerations
@@ -65,7 +99,6 @@ Design Considerations
     -   Limit withdrawal transaction senders to the withdrawal address with a validator pubkey arg.
 
 -   Things to graph/create a claculator for
-    -   At what point would the expiration date be so far out that the operator bond wouldn't cover an exit tomorrow?
     -   Risk
         -   Assuming a validator is slashed immediately and leaks into exiting, how much of the guarantee would be fulfilled?
             -   If all with plenty left over, then risk is considered very low
@@ -84,44 +117,9 @@ Design Considerations
         -   Shorter lifetimes require less bond to cover potential loss
         -   What does this relationship look like?
 
-
-Worst Case Scenarios
----------
-
 -   A validator never exits and keeps validating indefinitely, never releasing funds. No one wins, the operator continues to spend electricity to keep the node validating. Highly unlikely to ever occur.
 
 -   Operator fails at their job, the validator is forced to exit, and the Ivory NFT fails to deliver on its reward guarantee. It would take a spectacular failure for this to occur, and the risk can be controlled by only purchasing higher bond Ivory NFTs.
-
-
-Development Phases
--------------
-
-1.  **Phase 1 - Validator Contracts + Marketplace**
-    -   Website/dApp
-    -   Simple Smart Contract Wallet
-    -   Base Protocol implementation
-    -   A dedicated marketplace built specifically for buying and selling Validator Contracts.
-    -   Necessary for giving ether holders a voice in the market.
-    -   Will likely involve another temporary development fee on transactions.
-
-2.  **Phase 2 - Tokenization via crypto-ETF**
-    -   Supports a larger market for low-bond contracts by diluting the risk associated with them.
-    -   Allows casual investors to passively participate.
-    -   Will require a DAO and Oracle(s).
-    -   Will involve a permanent DAO fee.
-    -   May be better handled by an existing crypto-ETF protocol/DAO.
-
-
-Hosted Website
--------------
-
--   **Quick Introduction**
--   **Link to dApp**
--   **Documentation**
-    -   Vision/Mission
-    -   How it works
-
--   **Social Links**
 
 
 IPFS dApp
@@ -154,11 +152,20 @@ IPFS dApp
         -   Fill existing buy orders
         -   Create new sell orders
 
--   **ETF Token** (separate dApp? requires oracle/node/DAO)
-    -   Validator Contract Terms distribution
-    -   Token Value
-    -   Mint Instantly
-        -   Auto-generates buy orders owned by ETF if no burn-orders are active.
-    -   Create burn order
-        -   Allocates ETH from Burns to orders until filled
-        -   Allocates ETH from Mints to orders until filled
+
+# Phase 2 - Tokenization via Bond Fund
+
+-   Only purchases bonds with quality rating above a certain amount.
+    -   Possibly also allowing a portion of the pool to come from lower quality ratings.
+-   How are bond tokens valued?
+    -   Simply by the implied value of the underlying bonds plus the deposit pool over the number of tokens issued?
+-   No oracle is needed.
+-   No insurance pool.
+    -   **TODO: What happens if bonds fail to deliver?**
+-   Token holders can place orders to redeem ETH from their tokens.
+    - Filled when either someone else deposits ETH or when a bond in the pool is exercised.
+- Node
+    -   Watches for viable bonds when a sufficient deposit pool balance is available.
+    -   Watches for bonds that are ready to be exercised.
+    -   Would trigger a parameterless action on the smart contract and get a small kickback to cover gas and some.
+    -   To easily decentralize the node, hook into a beacon with validators that can inject potential transaction(s) upon being selected submitting a block proposal.
