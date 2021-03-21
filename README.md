@@ -7,7 +7,7 @@ Ethereum Validator Bond NFTs and Fund Tokens
 Problem
 -------------
 
-Ethereum needs a staking pool protocol that, if it were to be used by every single validator in the ecosystem, would not begin to challenge to Ethereum's legitimacy. All existing staking pools involve either a centralized authority or DAO governance, when all we need is a simple protocol that facilitates the market between node operators and ether holders. Specifically, we need a protocol that:
+Ethereum needs a pooled staking protocol that, if it were to be used by every single validator in the ecosystem, would not begin to challenge to Ethereum's legitimacy. All existing staking pools involve either a centralized authority or DAO governance, when all we need is a simple protocol that facilitates the market between node operators and ether holders. Specifically, we need a protocol that:
 
 -   Involves minimum possible trust
 -   Is fully decentralized
@@ -33,14 +33,6 @@ In the background, there is a pool watching for high quality bonds and buying th
 
 
 # Phase 1 - Bond Marketplace
-
--   Website/dApp.
--   Simple Smart Contract Wallet.
--   Base Protocol implementation.
--   A dedicated marketplace built specifically for buying and selling Validator Contracts.
--   Necessary for giving ether holders a voice in the market.
--   Will likely involve another temporary development fee on transactions.
--   Notification system for when tokens can be exercised.
 
 
 Contract Standard
@@ -97,29 +89,6 @@ Design Considerations
 -   This whole protocol hinges on the final withdrawal spec supporting the means for smart contracts to attribute a withdrawal balance to a specific validator. It doesn't much matter how that happens, but I would prefer a method that allows a single smart contract withdrawal address to be assigned to any number validators as to avoid needing to deploy a new smart contract for every validator that uses this protocol. Suggestions:
     -   Allow validator state to be queryable.
     -   Limit withdrawal transaction senders to the withdrawal address with a validator pubkey arg.
-
--   Things to graph/create a claculator for
-    -   Risk
-        -   Assuming a validator is slashed immediately and leaks into exiting, how much of the guarantee would be fulfilled?
-            -   If all with plenty left over, then risk is considered very low
-            -   If there's just enough to cover it, then risk is considered low
-            -   Risk also increases with lower bonds to reflect the higher probability of the contracts being used in an attack
-                -   probably an exponential increase
-    -   Value
-        -   Guarantee - price
-        -   Could the premium `price-(32-bond)` get locked up only to be realized at withdrawal?
-        -   Or does it matter? I mean... that's kinda cool that, as a node operator, you get a small payment up front. But does that open up an attack vector or anything? You'd have to make something like a 3 year contract where you take 30% with a 1ETH bond to maybe potentially exploit it... maybe that's a good enough reason to set the minimum bond at 2ETH?
-    -   Minimum predicted APY
-        - (Guarantee-(32-Bond))/lifetime
-    -   Failure to Withdraw leak
-    -   Bond coverage to lifetime ratio
-        -   Longer lifetimes will require larger bonds to cover potential loss
-        -   Shorter lifetimes require less bond to cover potential loss
-        -   What does this relationship look like?
-
--   A validator never exits and keeps validating indefinitely, never releasing funds. No one wins, the operator continues to spend electricity to keep the node validating. Highly unlikely to ever occur.
-
--   Operator fails at their job, the validator is forced to exit, and the Ivory NFT fails to deliver on its reward guarantee. It would take a spectacular failure for this to occur, and the risk can be controlled by only purchasing higher bond Ivory NFTs.
 
 
 IPFS dApp
