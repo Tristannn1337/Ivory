@@ -94,7 +94,8 @@ Design Considerations
 -   This whole protocol hinges on the final withdrawal spec supporting the means for smart contracts to attribute a withdrawal balance to a specific validator. It doesn't much matter how that happens, but I would prefer a method that allows a single smart contract withdrawal address to be assigned to any number validators as to avoid needing to deploy a new smart contract for every validator that uses this protocol. Suggestions:
     -   Allow validator state to be queryable.
     -   Limit withdrawal transaction senders to the withdrawal address with a validator pubkey arg.
--   The Ivory Exchange should limit partial orders to increments of 0.1 ether
+    
+-   The Ivory Exchange should limit partial orders to increments of 0.01 ether
 
 
 IPFS dApp
