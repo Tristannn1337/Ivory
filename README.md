@@ -64,22 +64,22 @@ Cryptoeconomics
     -   **TODO: calculation**
 
 -   **Withdrawal Calculations**
-    -   grace_period = 50000
+    -   `grace_period = 50000`
         -   Hardcoded to ~7 days, or roughly the longest expected period of nonfinality in a worst case scenario.
 
-    -   principal_yield =  APR / (total_blocks * 12 /60 /60 /24 /365) * principal
+    -   `principal_yield =  APR / (total_blocks * 12 /60 /60 /24 /365) * principal`
 
-    -   normalized_time_to_maturity = max(blocks_until_maturity - grace_period, 0) / maturity_term
+    -   `normalized_time_to_maturity = max(blocks_until_maturity - grace_period, 0) / maturity_term`
 
-    -   early_withdrawal_penalty = (withdrawal_balance - 32 - principal_yield) * pow(normalized_time_to_maturity, 2)
+    -   `early_withdrawal_penalty = (withdrawal_balance - 32 - principal_yield) * pow(normalized_time_to_maturity, 2)`
         -   If a validator balance is withdrawn before the maturity block, a penalty is calculated against the operator's rewards based on the number of blocks left until the maturity block with a quadratic bias towards lower penalties. This means operators who exit early keep less of their accumulated rewards. This doesn't mean the operator would lose any of their stake,unless they were slashed by the network in which case the slash is magnified.
 
-    -   excess_rewards = (withdrawal_balance - 32) / total_blocks * max(blocks_past_maturity - grace_period, 0)
+    -   `excess_rewards = (withdrawal_balance - 32) / total_blocks * max(blocks_past_maturity - grace_period, 0)`
         -   If a validator balance is withdrawn past the maturity block, all additional operator rewards are allocated to the bond on top of the APR being applied to the total duration.
 
-    -   final_bond_value = min(principal + principal_yield + abs(early_withdrawal_penalty) + excess_rewards, withdrawal_balance)
+    -   `final_bond_value = min(principal + principal_yield + abs(early_withdrawal_penalty) + excess_rewards, withdrawal_balance)`
 
-    -   final_operator_balance = withdrawal_balance - final_bond_value
+    -   `final_operator_balance = withdrawal_balance - final_bond_value`
 
 -   **Temporary Development Fee on Withdrawal**
     -   When a validator's balance is withdrawn and the balance is portioned out to the operator and token holders, a small development fee may be taken from the realized profits.
