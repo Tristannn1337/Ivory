@@ -52,40 +52,41 @@ Contract Standard
 -   **APR** (%)
     -   The reward rate the operator expects from the network, discounted by their comission rate, and guaranteed to the bond holder.
 
--   **Grace Period** (Blocks)
-    -   Number of blocks before and after the maturity block when an operator may withdraw without penalty.
-    -   Should be hardcoded to one week. One week early and one week late.
-
--   **Qualtiy Rating** (Score)
-    -   A value given to a bond to make the buying process easier (and for sorting???)
-    -   Possibly calculated only on the front end, and not in-contract... unless useful for sorting...
-    -   Facilitate fund autonomy???
-    -   **TODO: calculation**
-
 
 Cryptoeconomics
 ---------------
 
--   **Late Withdrawal Penalty**
-    -   If a validator balance is withdrawn past the maturity block, all additional operator rewards are allocated to the bond on top of the APR being applied to the total duration.
-        -   excess_rewards = (withdrawal_balance - 32) / total_blocks * max(blocks_past_maturity - grace_period, 0)
-        -   principal_yield = principal * (APR / total_years)
-        -   bond_value = min(principal + principal_yield + excess_rewards, withdrawal_balance)
-        -   operator_balance = withdrawal_balance - bond_value
+-   **Quality Rating** (Score)
+    -   Derived from the bond configuration
+    -   Used to sort bonds
+    -   Facilitates easy bond selection
+    -   May be used to automate fund bond selection
+    -   **TODO: calculation**
 
--   **Early Withdrawal Penalty**
-    -   If a validator balance is withdrawn before the maturity block, a penalty is calculated against the operator's rewards based on the number of blocks left until the maturity block with a quadratic bias towards lower penalties. This means operators who exit early keep less of their accumulated rewards. This doesn't mean the operator would lose any of their stake,unless they were slashed by the network in which case the slash is magnified.
-        -   principal_yield = principal * (APR / total_years)
-        -   normalized_time_to_maturity = max(blocks_until_maturity - grace_period, 0) / maturity_term
-        -   early_withdrawal_penalty = (withdrawal_balance - 32 - principal_yield) * pow(normalized_time_to_maturity, 2)
-        -   bond_value = min(principal + principal_yield + abs(early_withdrawal_penalty), withdrawal_balance)
-        -   operator_balance = withdrawal_balance - bond_value
+-   **Withdrawal Calculations**
+    -   grace_period = 50000
+        -   Hardcoded to ~7 days, or roughly the longest expected period of nonfinality in a worst case scenario.
+
+    -   principal_yield =  APR / (total_blocks * 12 /60 /60 /24 /365) * principal
+
+    -   normalized_time_to_maturity = max(blocks_until_maturity - grace_period, 0) / maturity_term
+
+    -   early_withdrawal_penalty = (withdrawal_balance - 32 - principal_yield) * pow(normalized_time_to_maturity, 2)
+        -   If a validator balance is withdrawn before the maturity block, a penalty is calculated against the operator's rewards based on the number of blocks left until the maturity block with a quadratic bias towards lower penalties. This means operators who exit early keep less of their accumulated rewards. This doesn't mean the operator would lose any of their stake,unless they were slashed by the network in which case the slash is magnified.
+
+    -   excess_rewards = (withdrawal_balance - 32) / total_blocks * max(blocks_past_maturity - grace_period, 0)
+        -   If a validator balance is withdrawn past the maturity block, all additional operator rewards are allocated to the bond on top of the APR being applied to the total duration.
+
+    -   final_bond_value = min(principal + principal_yield + abs(early_withdrawal_penalty) + excess_rewards, withdrawal_balance)
+
+    -   final_operator_balance = withdrawal_balance - final_bond_value
 
 -   **Temporary Development Fee on Withdrawal**
     -   When a validator's balance is withdrawn and the balance is portioned out to the operator and token holders, a small development fee may be taken from the realized profits.
     -   These fees expire after either a predetermined amount of time or if a ceiling has been reached for total fees extracted.
     -   The terms of this fee is subject to change, but currently stands at 0.5% for 30 years or until 100,000 ether has been collected.
     -   This fee is intentionally taken out at withdrawl, not at sale, in order to avoid profit from contracts that fail to deliver.
+    -   **TODO: Add to Withdrawal calculations**
 
 
 Design Considerations
@@ -94,7 +95,7 @@ Design Considerations
 -   This whole protocol hinges on the final withdrawal spec supporting the means for smart contracts to attribute a withdrawal balance to a specific validator. It doesn't much matter how that happens, but I would prefer a method that allows a single smart contract withdrawal address to be assigned to any number validators as to avoid needing to deploy a new smart contract for every validator that uses this protocol. Suggestions:
     -   Allow validator state to be queryable.
     -   Limit withdrawal transaction senders to the withdrawal address with a validator pubkey arg.
-    
+
 -   The Ivory Exchange should limit partial orders to increments of 0.01 ether
 
 
