@@ -47,10 +47,11 @@ Contract Standard
 
 -   **Maturity** (Block)
     -   The block that the operator is comitting to withdrawing the validator balance by.
-    -   Enforced by a **Late Withdrawal Penalty** and a **Early Withdrawal Penalty** described in the cryptoeconomics section.
+    -   Enforced by penalties described in the cryptoeconomics withdrawal calculations section.
+    -   Operator is given a grace period of +/- 7 days.
 
 -   **APR** (%)
-    -   The reward rate the operator expects from the network, discounted by their comission rate, and guaranteed to the bond holder.
+    -   The reward rate the operator expects from the network, presumibly discounted by their comission rate, and guaranteed to the bond holder.
 
 
 Cryptoeconomics
@@ -66,19 +67,14 @@ Cryptoeconomics
 -   **Withdrawal Calculations**
     -   `grace_period = 50000`
         -   Hardcoded to ~7 days, or roughly the longest expected period of nonfinality in a worst case scenario.
-
     -   `principal_yield =  APR / (total_blocks * 12 /60 /60 /24 /365) * principal`
-
     -   `normalized_time_to_maturity = max(blocks_until_maturity - grace_period, 0) / maturity_term`
-
     -   `early_withdrawal_penalty = (withdrawal_balance - 32 - principal_yield) * pow(normalized_time_to_maturity, 2)`
-        -   If a validator balance is withdrawn before the maturity block, a penalty is calculated against the operator's rewards based on the number of blocks left until the maturity block with a quadratic bias towards lower penalties. This means operators who exit early keep less of their accumulated rewards. This doesn't mean the operator would lose any of their stake,unless they were slashed by the network in which case the slash is magnified.
-
+        -   If a validator balance is withdrawn before the maturity block, a penalty is applied against the operator's rewards based on the number of blocks left until the maturity block with a quadratic bias towards lower penalties. 
+        -   The operator would not lose any of their stake unless they were slashed by the network, in which case the slash is magnified by this penalty.
     -   `excess_rewards = (withdrawal_balance - 32) / total_blocks * max(blocks_past_maturity - grace_period, 0)`
-        -   If a validator balance is withdrawn past the maturity block, all additional operator rewards are allocated to the bond on top of the APR being applied to the total duration.
-
+        -   If a validator balance is withdrawn past the maturity block, all additional rewards are allocated to the bond on top of the APR being applied to the total duration.
     -   `final_bond_value = min(principal + principal_yield + abs(early_withdrawal_penalty) + excess_rewards, withdrawal_balance)`
-
     -   `final_operator_balance = withdrawal_balance - final_bond_value`
 
 -   **Temporary Development Fee on Withdrawal**
