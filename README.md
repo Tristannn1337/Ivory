@@ -52,12 +52,9 @@ Contract Standard
 -   **APR** (%)
     -   The reward rate the operator expects from the network, discounted by their comission rate, and guaranteed to the bond holder.
 
--   **Penalty Multiplier** (%)
-    -   The APR multiplier applied to determine pentalty rates for withdrawing early or late.
-    -   Allows operators to adjust risk propositions and justify different comission rates.
-
 -   **Grace Period** (Blocks)
-    -   Number of days before and after the maturity block when an operator may withdraw without penalty.
+    -   Number of blocks before and after the maturity block when an operator may withdraw without penalty.
+    -   Should be hardcoded to one week. One week early and one week late.
 
 -   **Qualtiy Rating** (Score)
     -   A value given to a bond to make the buying process easier (and for sorting???)
@@ -70,15 +67,19 @@ Cryptoeconomics
 ---------------
 
 -   **Late Withdrawal Penalty**
-    -   If a validator balance is withdrawn past the maturity block, a penalty is calculated based on the number of blocks that have past since the maturity block.
-    -   The intent is that the penalty would start negligibly low and increase over time, consuming any additional operator profit being earned within a few days, and start cutting into the operator's profits within a week.
-    -   Calculated by interpolating between APR and multiplied APR over X number of blocks after the grace period.
-        -   Over how many blocks does the APR interpolate? Grace period? So grace period serves two purposes?
+    -   If a validator balance is withdrawn past the maturity block, all additional operator rewards are allocated to the bond on top of the APR being applied to the total duration.
+        -   excess_rewards = (withdrawal_balance - 32) / total_blocks * max(blocks_past_maturity - grace_period, 0)
+        -   principal_yield = principal * (APR / total_years)
+        -   bond_value = min(principal + principal_yield + excess_rewards, withdrawal_balance)
+        -   operator_balance = withdrawal_balance - bond_value
 
 -   **Early Withdrawal Penalty**
-    -   If a validator balance is withdrawn before the maturity block, a penalty is calculated based on the number of blocks left until the maturity block.
-    -   The intent is that the penalty would start out at it's highest and lower over time, reducing to nothing within days of the maturity block.
-    -   **TODO: penalty equation** ... maybe an interpolation between either a hardcoded value or a multiple of the contract APR over the number of blocks until maturity, minus 5 days?
+    -   If a validator balance is withdrawn before the maturity block, a penalty is calculated against the operator's rewards based on the number of blocks left until the maturity block with a quadratic bias towards lower penalties. This means operators who exit early keep less of their accumulated rewards. This doesn't mean the operator would lose any of their stake,unless they were slashed by the network in which case the slash is magnified.
+        -   principal_yield = principal * (APR / total_years)
+        -   normalized_time_to_maturity = max(blocks_until_maturity - grace_period, 0) / maturity_term
+        -   early_withdrawal_penalty = (withdrawal_balance - 32 - principal_yield) * pow(normalized_time_to_maturity, 2)
+        -   bond_value = min(principal + principal_yield + abs(early_withdrawal_penalty), withdrawal_balance)
+        -   operator_balance = withdrawal_balance - bond_value
 
 -   **Temporary Development Fee on Withdrawal**
     -   When a validator's balance is withdrawn and the balance is portioned out to the operator and token holders, a small development fee may be taken from the realized profits.
