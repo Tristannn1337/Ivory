@@ -1,5 +1,8 @@
 ![Ivory Protocol](https://github.com/Tristannn1337/Ivory/blob/main/LogoV1.png)
 
+![One Page](https://github.com/Tristannn1337/Ivory/blob/main/one-page.png)
+
+
 # The Ivory Protocol
 Ethereum Validator Bond NFTs and Fund Tokens
 
@@ -40,16 +43,17 @@ Contract Standard
 
 -   **Principal** (ETH)
     -   The amount of ETH that the operator is raising out of 32.
+    -   Limited to increments of 1 ether?
 
 -   **Maturity** (Block)
     -   The block that the operator is comitting to withdrawing the validator balance by.
     -   Enforced by a **Late Withdrawal Penalty** and a **Early Withdrawal Penalty** described in the cryptoeconomics section.
 
--   **Annualized Yield** (%)
-    -   The yield operator expects from the network, discounted by their comission rate, and guaranteed to the bond holder.
+-   **APR** (%)
+    -   The reward rate the operator expects from the network, discounted by their comission rate, and guaranteed to the bond holder.
 
 -   **Penalty Multiplier** (%)
-    -   The yield multiplier applied to determine pentalty rates for withdrawing early or late.
+    -   The APR multiplier applied to determine pentalty rates for withdrawing early or late.
     -   Allows operators to adjust risk propositions and justify different comission rates.
 
 -   **Grace Period** (Blocks)
@@ -68,13 +72,13 @@ Cryptoeconomics
 -   **Late Withdrawal Penalty**
     -   If a validator balance is withdrawn past the maturity block, a penalty is calculated based on the number of blocks that have past since the maturity block.
     -   The intent is that the penalty would start negligibly low and increase over time, consuming any additional operator profit being earned within a few days, and start cutting into the operator's profits within a week.
-    -   Calculated by interpolating between yield and multiplied yield over X number of blocks after the grace period.
-        -   Over how many blocks does the yield interpolate? Grace period? So grace period serves two purposes?
+    -   Calculated by interpolating between APR and multiplied APR over X number of blocks after the grace period.
+        -   Over how many blocks does the APR interpolate? Grace period? So grace period serves two purposes?
 
 -   **Early Withdrawal Penalty**
     -   If a validator balance is withdrawn before the maturity block, a penalty is calculated based on the number of blocks left until the maturity block.
     -   The intent is that the penalty would start out at it's highest and lower over time, reducing to nothing within days of the maturity block.
-    -   **TODO: penalty equation** ... maybe an interpolation between either a hardcoded value or a multiple of the contract yield over the number of blocks until maturity, minus 5 days?
+    -   **TODO: penalty equation** ... maybe an interpolation between either a hardcoded value or a multiple of the contract APR over the number of blocks until maturity, minus 5 days?
 
 -   **Temporary Development Fee on Withdrawal**
     -   When a validator's balance is withdrawn and the balance is portioned out to the operator and token holders, a small development fee may be taken from the realized profits.
@@ -89,6 +93,7 @@ Design Considerations
 -   This whole protocol hinges on the final withdrawal spec supporting the means for smart contracts to attribute a withdrawal balance to a specific validator. It doesn't much matter how that happens, but I would prefer a method that allows a single smart contract withdrawal address to be assigned to any number validators as to avoid needing to deploy a new smart contract for every validator that uses this protocol. Suggestions:
     -   Allow validator state to be queryable.
     -   Limit withdrawal transaction senders to the withdrawal address with a validator pubkey arg.
+-   The Ivory Exchange should limit partial orders to increments of 0.1 ether
 
 
 IPFS dApp
@@ -129,12 +134,19 @@ IPFS dApp
 -   How are bond tokens valued?
     -   Simply by the implied value of the underlying bonds plus the deposit pool over the number of tokens issued?
 -   No oracle is needed.
--   No insurance pool.
-    -   **TODO: What happens if bonds fail to deliver?**
+-   Insurance pool?
+    -   Might be good for the fund to put aside it's own fee strictly for covering this scenario?
+    -   Maybe the listed yield for the pool could be variable based on how large the insurance pool is...
+        -   When the insurance pool is completely empty, the yield is at it's lowest
+        -   When the insurance pool is maxed out, the yield is at it's highest
+        -   The insurance pool size shoud probably be relative to the size of the fund
+        -   **TODO: determine how large the insurance pool should be**
 -   Token holders can place orders to redeem ETH from their tokens.
     - Filled when either someone else deposits ETH or when a bond in the pool is exercised.
-- Node
+-   Node
     -   Watches for viable bonds when a sufficient deposit pool balance is available.
     -   Watches for bonds that are ready to be exercised.
     -   Would trigger a parameterless action on the smart contract and get a small kickback to cover gas and some.
     -   To easily decentralize the node, hook into a beacon with validators that can inject potential transaction(s) upon being selected submitting a block proposal.
+-   Limited Development fee similar to base protocol
+    -   Not to be extracted unless insurance pool is maxed out.
