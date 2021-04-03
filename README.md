@@ -29,7 +29,7 @@ Node Operator creates Validator Bonds with terms they desire(principal, maturity
 ### Bond Terms
 -   **Principal** (ETH)
     -   The amount of ETH that the operator is raising out of 32.
-    -   Limited to increments of 1 ether?
+    -   Limited to increments of 0.5 ether?
 -   **Maturity** (Block)
     -   The block that the operator is committing to withdrawing the validator balance by.
     -   Enforced by penalties described in the cryptoeconomics withdrawal calculations section.
