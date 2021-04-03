@@ -7,7 +7,6 @@ An Ethereum Validator Bond Ecosystem
 
 ## Problem
 Ethereum needs a pooled staking protocol that, if it were to be used by every single validator in the ecosystem, would not begin to challenge Ethereum's legitimacy. All existing staking pools involve either a centralized authority or DAO governance when all we need is a simple protocol that facilitates a market between node operators and ether holders. Specifically, we need a protocol that:
-
 -   Involves minimum possible trust
 -   Is fully decentralized
 -   Is minimally regulated, allowing the market to dictate risks and rewards
@@ -28,38 +27,27 @@ Node Operator creates Validator Bonds with terms they desire(principal, maturity
 -   To reduce validator churn on the network, bond terms may be renewed by bondholders before maturity.
 
 ### Bond Terms
-
 -   **Principal** (ETH)
     -   The amount of ETH that the operator is raising out of 32.
     -   Limited to increments of 1 ether?
-
 -   **Maturity** (Block)
     -   The block that the operator is committing to withdrawing the validator balance by.
     -   Enforced by penalties described in the cryptoeconomics withdrawal calculations section.
     -   Operator is given a grace period of +/- 7 days.
-
 -   **APR** (%)
     -   The reward rate the operator expects from the network, presumably discounted by their commission rate, and guaranteed to the bondholder.
 
-### Cryptoeconomics
-
--   **Quality Rating** (Score)
-    -   Derived from the bond configuration
-    -   Used to sort bonds
-    -   Facilitates easy bond selection
-    -   May be used to automate fund bond selection
-    -   **TODO: calculation**
-
--   **Withdrawal Calculations** - how validator balance is portioned out upon exit and withdrawal
-    -   `grace_period = 50000` _Hardcoded to +/- 7 days, based roughly on the longest expected period of nonfinality in a worst case scenario (2 weeks)._
-    -   `principal_yield =  APR / (total_blocks * 12 / 60 / 60 / 24 / 365) * principal`
-    -   `normalized_time_to_maturity = max(blocks_until_maturity - grace_period, 0) / maturity_term`
-    -   `early_withdrawal_penalty = (withdrawal_balance - 32 - principal_yield) * pow(normalized_time_to_maturity, 2)` _If a validator balance is withdrawn before the maturity block, a penalty is applied based on the number of blocks left until the maturity block with a quadratic bias towards lower penalties. The operator doesn't lose any of their own stake unless they were slashed by the network, in which case the slash is magnified._
-    -   `excess_rewards = (withdrawal_balance - 32) / total_blocks * max(blocks_past_maturity - grace_period, 0)` _If a validator balance is withdrawn past the maturity block, all additional rewards are allocated to the bond holders on top of APR being applied to the total duration._
-    -   `rewards_total = principal_yield + abs(early_withdrawal_penalty) + excess_rewards`
-    -   `development_fee = principal + rewards_total < withdrawal_balance && is_dev_fee_active ? rewards_total * 0.005 : 0` *0.5% development fee is taken out as long as the bond doesn't fail to deliver and if is_dev_fee_active when less than 30 years have passed since contract deployment and less than 100,000 ether in fees have been collected.*
-    -   `final_bond_value = min(principal + rewards_total - development_fee, withdrawal_balance)`
-    -   `final_operator_balance = withdrawal_balance - final_bond_value`
+### Withdrawal Calculations
+Validator balance portioning between the development fee, bond holders, and node operator upon validator exit and withdrawal.
+-   `grace_period = 50000` _Hardcoded to +/- 7 days, based roughly on the longest expected period of nonfinality in a worst case scenario (2 weeks)._
+-   `principal_yield =  APR / (total_blocks * 12 / 60 / 60 / 24 / 365) * principal`
+-   `normalized_time_to_maturity = max(blocks_until_maturity - grace_period, 0) / maturity_term`
+-   `early_withdrawal_penalty = (withdrawal_balance - 32 - principal_yield) * pow(normalized_time_to_maturity, 2)` _If a validator balance is withdrawn before the maturity block, a penalty is applied based on the number of blocks left until the maturity block with a quadratic bias towards lower penalties. The operator doesn't lose any of their own stake unless they were slashed by the network, in which case the slash is magnified._
+-   `excess_rewards = (withdrawal_balance - 32) / total_blocks * max(blocks_past_maturity - grace_period, 0)` _If a validator balance is withdrawn past the maturity block, all additional rewards are allocated to the bond holders on top of APR being applied to the total duration._
+-   `rewards_total = principal_yield + abs(early_withdrawal_penalty) + excess_rewards`
+-   `final_development_fee = principal + rewards_total < withdrawal_balance && is_dev_fee_active ? rewards_total * 0.005 : 0` *0.5% development fee is taken out as long as the bond doesn't fail to deliver and if is_dev_fee_active when less than 30 years have passed since contract deployment and less than 100,000 ether in fees have been collected.*
+-   `final_bond_value = min(principal + rewards_total - final_development_fee, withdrawal_balance)`
+-   `final_operator_balance = withdrawal_balance - final_bond_value`
 
 ### Design Considerations
 -   Ivory Ink's exact design and mechanics hinge on the final withdrawal spec supporting the means for smart contracts to attribute a withdrawal balance to a specific validator. 
@@ -76,38 +64,45 @@ Node Operator creates Validator Bonds with terms they desire(principal, maturity
     -   May only occur before `maturity - grace_period - 14_days` and pass before `maturity - grace_period`.
     -   Require buyout of no-votes and absent votes by either operator or by yes-votes, with favor given to yes-votes.
     -   Renewal fails if voting ends without enough ether to cover buyout no-votes and absent votes.
+-   Should bond tokens represent incements of 0.5 ether so that the maximum number of individual balances is <64?
+    -   Not sure if necessary to put limits on maximum contract execution time
 
 ### Web dApp
--   **Dashboard**
-    -   ETH Balance
-        -   Deposit
-        -   Withdraw
-    -   Active Validator Contracts *(maybe only visible to people who have identified themselves as operators somehow?)*
-        -   Value, Expiration, Validator link
-        -   Trigger Withdrawal
-        -   Create New Validator Contract
-            -   Mirror of the official Ethereum deposit introduction
-            -   Define terms, upload deposit.json, commit stake
-    -   NFT Balances
-        -   Value, Expiration, Validator link
-        -   Trigger Withdrawal
-        -   Burn for ETH
+-   **ETH Wallet**
+    -   Deposit
+    -   Withdraw
+-   **Active Validator Bonds**
+    -   Validator address
+        -   Current Balance
+    -   Terms (Principal, Maturity, APR)
+    -   Token Balance
+        -   Implied Value
+    -   Trigger Withdrawal
+-   **Create New Validator Bond**
+    -   Mirror of the official Ethereum deposit introduction
+    -   Define terms, upload deposit.json, commit stake
 
 
 ## 2. Ivory Bazaar - bond marketplace
 Facilitates transparent and educated transactions of Ivory Ink validator bonds and gives buyers an avenue to generate demand for the specific terms they desire by placing buy orders that Node Operators can fill directly.
 
+### Quality Rating
+A score derived from bond terms to sort and simplify bond selection by individuals or by Ivory Parade.
+-   **TODO: calculation**
+
 ### Web dApp
 -   **Order Book Visualizer**
-    -   Risk
+    -   Quality Rating
     -   Intrinsic Value
-    -   Historical Sale Price
-    -   Buy Validator Bonds
-        -   Fill existing sell orders
-        -   Create new buy orders
-    -   Sell Validator Bonds
-        -   Fill existing buy orders
-        -   Create new sell orders
+    -   Buy existing sell order
+        -   Simple swap
+    -   Sell to an existing buy order
+        -   Hook into Ivory Ink Deposit dApp and attempt to fill buy order in single transaction
+-   **Create new Buy Order**
+    -   Define either desired terms or a general quality rating
+    -   Limit precision of desired terms to encourage buy order bundling?
+-   **Create new Sell Order**
+    -   Hook into Ivory Ink Deposit dApp and create sell order in single transaction
 
 
 ## 3. Ivory Parade - tokenized fund
@@ -124,6 +119,7 @@ Facilitates tokenized staking by distilling the complexity of the Ivory Bazaar d
 -   Watches for bonds that are ready to be redeemed.
 -   Watches for bond renewal proposals that would the fund vote yes to, and potentially buy out no votes and absent votes on.
 -   Triggers parameterless actions on the Ivory Parade contract and gets a small kickback that covers gas and incentive sufficient enough to convince operators to run it.
+-   Failed actions cause agent to lose their gas money, intentionally penalizing them.
 
 ### Web dApp
 -   **NAV Graph**
@@ -137,5 +133,6 @@ Facilitates tokenized staking by distilling the complexity of the Ivory Bazaar d
 
 
 ## Additional Information
-Everything about this is a work in progress.
+Everything about this project is a work in progress and subject to change.
+
 0x2894690AC5Fcdc82aaa372e8bf85797C7e7B577C
