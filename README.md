@@ -6,7 +6,7 @@ An Ethereum Validator Bond Ecosystem
 
 
 ## Problem
-Ethereum needs a pooled staking protocol that, if it were to be used by every single validator in the ecosystem, would not begin to challenge to Ethereum's legitimacy. All existing staking pools involve either a centralized authority or DAO governance, when all we need is a simple protocol that facilitates a market between node operators and ether holders. Specifically, we need a protocol that:
+Ethereum needs a pooled staking protocol that, if it were to be used by every single validator in the ecosystem, would not begin to challenge Ethereum's legitimacy. All existing staking pools involve either a centralized authority or DAO governance when all we need is a simple protocol that facilitates a market between node operators and ether holders. Specifically, we need a protocol that:
 
 -   Involves minimum possible trust
 -   Is fully decentralized
@@ -23,9 +23,9 @@ Allow Node Operators to raise funds by selling Validator Bonds to individuals wh
 
 
 ## 1. Ivory Ink - Validator Bonds
-Allows a Node Operator to create a Validator Bonds with terms they desire(principal, maturity, APR) by making their validator deposits through the Ivory Ink dApp. This sends their validator into the activation queue and issues bond tokens back to the Node Operator. Upon validator exit and withdrawal, the validator balance is released back into Ivory Ink and portioned out between token holders and the Node Operator. 
--   To enforce liquidity for bond holders, Ivory Ink will penalize operators who exit their bonded validator either too early or too late. 
--   To reduce validator chrun on the network, bond terms may be renewed by bond holders before maturity.
+Node Operator creates Validator Bonds with terms they desire(principal, maturity, APR) by making their validator deposits through the Ivory Ink dApp. This sends their validator into the activation queue and issues bond tokens back to the Node Operator. Upon validator exit and withdrawal, the validator balance is released back into Ivory Ink and portioned out between token holders and the Node Operator. 
+-   To enforce liquidity for bondholders, Ivory Ink will penalize operators who exit their bonded validator either too early or too late. 
+-   To reduce validator churn on the network, bond terms may be renewed by bondholders before maturity.
 
 ### Bond Terms
 
@@ -34,12 +34,12 @@ Allows a Node Operator to create a Validator Bonds with terms they desire(princi
     -   Limited to increments of 1 ether?
 
 -   **Maturity** (Block)
-    -   The block that the operator is comitting to withdrawing the validator balance by.
+    -   The block that the operator is committing to withdrawing the validator balance by.
     -   Enforced by penalties described in the cryptoeconomics withdrawal calculations section.
     -   Operator is given a grace period of +/- 7 days.
 
 -   **APR** (%)
-    -   The reward rate the operator expects from the network, presumibly discounted by their comission rate, and guaranteed to the bond holder.
+    -   The reward rate the operator expects from the network, presumably discounted by their commission rate, and guaranteed to the bondholder.
 
 ### Cryptoeconomics
 
@@ -71,8 +71,8 @@ Allows a Node Operator to create a Validator Bonds with terms they desire(princi
         -   But partial NFT ownership over NFT's share of rewards becomes tricky...
         -   Should play with solutions in code
 -   Validator bond renewal
-    -   Bond holders act as a mini-DAO for renewal proposals. 
-    -   Renewal proposals may only be put up for vote by the operator.
+    -   Bondholders act as a mini-DAO for renewal proposals. 
+    -   Renewal proposals may only be put up for a vote by the operator.
     -   May only occur before `maturity - grace_period - 14_days` and pass before `maturity - grace_period`.
     -   Require buyout of no-votes and absent votes by either operator or by yes-votes, with favor given to yes-votes.
     -   Renewal fails if voting ends without enough ether to cover buyout no-votes and absent votes.
@@ -82,7 +82,7 @@ Allows a Node Operator to create a Validator Bonds with terms they desire(princi
     -   ETH Balance
         -   Deposit
         -   Withdraw
-    -   Active Validator Contracts *(maybe only visible to people who have identified themselves as operators somehow?)*
+    -   Active Validator Contracts *(maybe only visible to people who have identified themselves as operators somehow?)*
         -   Value, Expiration, Validator link
         -   Trigger Withdrawal
         -   Create New Validator Contract
@@ -112,18 +112,18 @@ Facilitates transparent and educated transactions of Ivory Ink validator bonds a
 
 ## 3. Ivory Parade - tokenized fund
 Facilitates tokenized staking by distilling the complexity of the Ivory Bazaar down into a single token that represents ownership over a pool of Ivory Ink validator bonds that are managed trustlessly by Agent Nodes who do nothing more than watch for opportunities to trigger parameterless Ivory Parade functions when it would result in a reward to the operator.
--   Purchases Ivory Ink validator bonds a varying quality ratings according to fund allocation settings and prioritizes bonds that distribute maturity dates evenly throughout time.
+-   Purchases Ivory Ink validator bonds of varying quality ratings according to fund allocation settings and prioritizes bonds that distribute maturity dates evenly throughout time.
 -   Votes yes on bond renewals when liquidity isn't needed by token holders with outstanding redemption orders.
--   Redeems bond balances back into deposit pool when available.
--   NAV calculated by implied value of the underlying bonds plus the deposit pool balance over the number of tokens issued.
--   Minimal management fee regularly taken from fund profits to support and incentivise agent nodes.
+-   Redeems bond balances back into the deposit pool when available.
+-   NAV is calculated by the implied value of the underlying bonds plus the deposit pool balance over the number of tokens issued.
+-   Minimal management fee regularly taken from fund profits to support and incentivize agent nodes.
 
 ### Agent Node
 -   A client running on hardware with access to block proposal transaction injection.
 -   Watches for bonds that the fund would purchase when a sufficient deposit pool balance is available.
 -   Watches for bonds that are ready to be redeemed.
 -   Watches for bond renewal proposals that would the fund vote yes to, and potentially buy out no votes and absent votes on.
--   Triggers a parameterless actions on the Ivory Parade contract and to get a small kickback that covers gas and incentive sufficient enough to convince operators to run it.
+-   Triggers parameterless actions on the Ivory Parade contract and gets a small kickback that covers gas and incentive sufficient enough to convince operators to run it.
 
 ### Web dApp
 -   **NAV Graph**
@@ -137,5 +137,5 @@ Facilitates tokenized staking by distilling the complexity of the Ivory Bazaar d
 
 
 ## Additional Information
-Absolutely everything about this is a work in progress.
+Everything about this is a work in progress.
 0x2894690AC5Fcdc82aaa372e8bf85797C7e7B577C
