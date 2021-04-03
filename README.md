@@ -15,14 +15,14 @@ Ethereum needs a pooled staking protocol that, if it were to be used by every si
 -   Facilitates tokenized staking for casual ETH holders
 
 
-## Proposal: Validator Bonds
-The essence of the Ivory Protocol is Node Operators raising funds to increase the number of validators they can run by selling Validator Bonds to individuals who wish to benefit from Validator staking without running a node of their own. The protocol is made up of three parts:
+## Proposal
+Allow Node Operators to raise funds by selling Validator Bonds to individuals who wish to benefit from Validator staking without running a node of their own. The protocol is made up of three parts:
 1. Standardize the **issuing and redeeming** of Validator Bonds with **Ivory Ink**.
 2. Facilitate a market for **selling and purchasing** Validator Bonds with **Ivory Bazaar**.
 3. Create a **tokenized fund** of Validator Bonds with **Ivory Parade**.
 
 
-## 1. Ivory Ink - foundation of the protocol.
+## 1. Ivory Ink - Validator Bonds
 Allows a Node Operator to create a Validator Bonds with terms they desire(principal, maturity, APR) by making their validator deposits through the Ivory Ink dApp. This sends their validator into the activation queue and issues bond tokens back to the Node Operator. Upon validator exit and withdrawal, the validator balance is released back into Ivory Ink and portioned out between token holders and the Node Operator. 
 -   To enforce liquidity for bond holders, Ivory Ink will penalize operators who exit their bonded validator either too early or too late. 
 -   To reduce validator chrun on the network, bond terms may be renewed by bond holders before maturity.
