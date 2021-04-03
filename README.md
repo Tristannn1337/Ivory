@@ -6,7 +6,7 @@ An Ethereum Validator Bond Ecosystem
 
 
 ## Problem
-Ethereum needs a pooled staking protocol that, if it were to be used by every single validator in the ecosystem, would not begin to challenge to Ethereum's legitimacy. All existing staking pools involve either a centralized authority or DAO governance, when all we need is a simple protocol that facilitates the market between node operators and ether holders. Specifically, we need a protocol that:
+Ethereum needs a pooled staking protocol that, if it were to be used by every single validator in the ecosystem, would not begin to challenge to Ethereum's legitimacy. All existing staking pools involve either a centralized authority or DAO governance, when all we need is a simple protocol that facilitates a market between node operators and ether holders. Specifically, we need a protocol that:
 
 -   Involves minimum possible trust
 -   Is fully decentralized
@@ -22,12 +22,12 @@ The essence of the Ivory Protocol is Node Operators raising funds to increase th
 3. Create a **tokenized fund** of Validator Bonds with **Ivory Parade**.
 
 
-### 1. Ivory Ink - foundation of the protocol.
+## 1. Ivory Ink - foundation of the protocol.
 Allows a Node Operator to create a Validator Bonds with terms they desire(principal, maturity, APR) by making their validator deposits through the Ivory Ink dApp. This sends their validator into the activation queue and issues bond tokens back to the Node Operator. Upon validator exit and withdrawal, the validator balance is released back into Ivory Ink and portioned out between token holders and the Node Operator. 
 -   To enforce liquidity for bond holders, Ivory Ink will penalize operators who exit their bonded validator either too early or too late. 
 -   To reduce validator chrun on the network, bond terms may be renewed by bond holders before maturity.
 
-#### Contract Standard
+### Contract Standard
 
 -   **Principal** (ETH)
     -   The amount of ETH that the operator is raising out of 32.
@@ -41,7 +41,7 @@ Allows a Node Operator to create a Validator Bonds with terms they desire(princi
 -   **APR** (%)
     -   The reward rate the operator expects from the network, presumibly discounted by their comission rate, and guaranteed to the bond holder.
 
-#### Cryptoeconomics
+### Cryptoeconomics
 
 -   **Quality Rating** (Score)
     -   Derived from the bond configuration
@@ -61,7 +61,7 @@ Allows a Node Operator to create a Validator Bonds with terms they desire(princi
     -   `final_bond_value = min(principal + rewards_total - development_fee, withdrawal_balance)`
     -   `final_operator_balance = withdrawal_balance - final_bond_value`
 
-#### Design Considerations
+### Design Considerations
 -   Ivory Ink's exact design and mechanics hinge on the final withdrawal spec supporting the means for smart contracts to attribute a withdrawal balance to a specific validator. 
 -   Could the Ivory Ink bonds be issued directly into an L2 shared with Ivory Bazaar and Ivory Parade?
 -   Validators will likely be allowed to withdraw excess balance on each proposal
@@ -77,7 +77,7 @@ Allows a Node Operator to create a Validator Bonds with terms they desire(princi
     -   Require buyout of no-votes and absent votes by either operator or by yes-votes, with favor given to yes-votes.
     -   Renewal fails if voting ends without enough ether to cover buyout no-votes and absent votes.
 
-#### Web dApp
+### Web dApp
 -   **Dashboard**
     -   ETH Balance
         -   Deposit
@@ -94,10 +94,10 @@ Allows a Node Operator to create a Validator Bonds with terms they desire(princi
         -   Burn for ETH
 
 
-### 2. Ivory Bazaar - bond marketplace
+## 2. Ivory Bazaar - bond marketplace
 Facilitates transparent and educated transactions of Ivory Ink validator bonds and gives buyers an avenue to generate demand for the specific terms they desire by placing buy orders that Node Operators can fill directly.
 
-#### Web dApp
+### Web dApp
 -   **Order Book Visualizer**
     -   Risk
     -   Intrinsic Value
@@ -110,7 +110,7 @@ Facilitates transparent and educated transactions of Ivory Ink validator bonds a
         -   Create new sell orders
 
 
-### 3. Ivory Parade - tokenized fund
+## 3. Ivory Parade - tokenized fund
 Facilitates tokenized staking by distilling the complexity of the Ivory Bazaar down into a single token that represents ownership over a pool of Ivory Ink validator bonds that are managed trustlessly by Agent Nodes who do nothing more than watch for opportunities to trigger parameterless Ivory Parade functions when it would result in a reward to the operator.
 -   Purchases Ivory Ink validator bonds a varying quality ratings according to fund allocation settings and prioritizes bonds that distribute maturity dates evenly throughout time.
 -   Votes yes on bond renewals when liquidity isn't needed by token holders with outstanding redemption orders.
@@ -118,14 +118,14 @@ Facilitates tokenized staking by distilling the complexity of the Ivory Bazaar d
 -   NAV calculated by implied value of the underlying bonds plus the deposit pool balance over the number of tokens issued.
 -   Minimal management fee regularly taken from fund profits to support and incentivise agent nodes.
 
-#### Agent Node
+### Agent Node
 -   A client running on hardware with access to block proposal transaction injection.
 -   Watches for bonds that the fund would purchase when a sufficient deposit pool balance is available.
 -   Watches for bonds that are ready to be redeemed.
 -   Watches for bond renewal proposals that would the fund vote yes to, and potentially buy out no votes and absent votes on.
 -   Triggers a parameterless actions on the Ivory Parade contract and to get a small kickback that covers gas and incentive sufficient enough to convince operators to run it.
 
-#### Web dApp
+### Web dApp
 -   **NAV Graph**
     -   Deposit Ether
 -   **Inflow-Outflow Graph**
@@ -136,6 +136,6 @@ Facilitates tokenized staking by distilling the complexity of the Ivory Bazaar d
 -   **Contract Activity Log**
 
 
-### Additional Information
+## Additional Information
 Absolutely everything about this is a work in progress.
 0x2894690AC5Fcdc82aaa372e8bf85797C7e7B577C
