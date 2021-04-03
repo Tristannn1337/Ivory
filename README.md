@@ -27,7 +27,7 @@ Allows a Node Operator to create a Validator Bonds with terms they desire(princi
 -   To enforce liquidity for bond holders, Ivory Ink will penalize operators who exit their bonded validator either too early or too late. 
 -   To reduce validator chrun on the network, bond terms may be renewed by bond holders before maturity.
 
-### Contract Standard
+### Bond Terms
 
 -   **Principal** (ETH)
     -   The amount of ETH that the operator is raising out of 32.
