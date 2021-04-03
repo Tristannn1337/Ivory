@@ -87,7 +87,7 @@ Validator balance portioning between the development fee, bond holders, and node
     -   Define terms, upload deposit.json, commit stake
 
 
-## 2. Ivory Bazaar - bond marketplace
+## 2. Ivory Bazaar - Bond Marketplace
 Facilitates transparent and educated transactions of Ivory Ink validator bonds and gives buyers an avenue to generate demand for the specific terms they desire by placing buy orders that Node Operators can fill directly.
 
 ### Quality Rating (WORK IN PROGRESS)
@@ -134,7 +134,7 @@ A score derived from bond terms to sort and simplify bond selection by individua
     -   Hook into Ivory Ink Deposit dApp and create sell order in single transaction
 
 
-## 3. Ivory Parade - tokenized fund
+## 3. Ivory Parade - Tokenized Fund
 Facilitates tokenized staking by distilling the complexity of the Ivory Bazaar down into a single token that represents ownership over a pool of Ivory Ink validator bonds that are managed trustlessly by Agent Nodes who do nothing more than watch for opportunities to trigger parameterless Ivory Parade functions when it would result in a reward to the operator.
 -   Purchases Ivory Ink validator bonds of varying quality ratings according to fund allocation settings and prioritizes bonds that distribute maturity dates evenly throughout time.
 -   Votes yes on bond renewals when liquidity isn't needed by token holders with outstanding redemption orders.
