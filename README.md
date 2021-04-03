@@ -30,12 +30,16 @@ Node Operator creates Validator Bonds with terms they desire(principal, maturity
 -   **Principal** (ETH)
     -   The amount of ETH that the operator is raising out of 32.
     -   Limited to increments of 0.5 ether?
+    -   Maximum of 30, minimum of 1
 -   **Maturity** (Block)
     -   The block that the operator is committing to withdrawing the validator balance by.
     -   Enforced by penalties described in the cryptoeconomics withdrawal calculations section.
     -   Operator is given a grace period of +/- 7 days.
+    -   Maximum of 30 years, minimum of 1 month
+        -   May be smart to make the maximum be a function of how long the contract has existed... for example, upon deployment the maximum could be 1 year and over the course of the next 5-10 years the maximum would be interpolated to it's final value of 30. Would allow the contract to stand the test of time before allowing people to make such long term commitments.
 -   **APR** (%)
     -   The reward rate the operator expects from the network, presumably discounted by their commission rate, and guaranteed to the bondholder.
+    -   Maximum of 0.10, minimum of 0.01
 
 ### Withdrawal Calculations
 Validator balance portioning between the development fee, bond holders, and node operator upon validator exit and withdrawal.
@@ -86,9 +90,34 @@ Validator balance portioning between the development fee, bond holders, and node
 ## 2. Ivory Bazaar - bond marketplace
 Facilitates transparent and educated transactions of Ivory Ink validator bonds and gives buyers an avenue to generate demand for the specific terms they desire by placing buy orders that Node Operators can fill directly.
 
-### Quality Rating
+### Quality Rating (WORK IN PROGRESS)
 A score derived from bond terms to sort and simplify bond selection by individuals or by Ivory Parade.
--   **TODO: calculation**
+-   Principal
+    -   **A** =< 14
+    -   **B** =< 22
+    -   **C** =< 28
+    -   **D** > 28
+-   APR
+    -   **A** >= 0.05
+    -   **B** >= 0.04
+    -   **C** >= 0.03
+    -   **D** < 0.03
+-   Maturity
+    -   **A** >= 1_year
+    -   **B** >= 6_months
+    -   **C** >= 3_months
+    -   **D** < 3_months
+-   Overall Grade Interpretation
+    -   **AAA** = **A+ Grade** _grade only possible with AAA rating_
+    -   **ABA** = **A Grade**
+    -   **ABB** = **B Grade**
+    -   **ACA** = **C Grade** _a C rating on any term results in a maximum C grade_
+    -   **BBB** = **C Grade**
+    -   **ADA** = **D Grade** _a D rating on any term results in a maximum D grade_
+    -   **ABC** = **D Grade**
+    -   **ACC** = **D Grade**
+    -   **BDD** = **F Grade**
+    -   **BCD** = **F Grade**
 
 ### Web dApp
 -   **Order Book Visualizer**
@@ -112,6 +141,11 @@ Facilitates tokenized staking by distilling the complexity of the Ivory Bazaar d
 -   Redeems bond balances back into the deposit pool when available.
 -   NAV is calculated by the implied value of the underlying bonds plus the deposit pool balance over the number of tokens issued.
 -   Minimal management fee regularly taken from fund profits to support and incentivize agent nodes.
+
+### Fund Allocation (WORK IN PROGRESS)
+-   60% A or A+ grade bonds
+-   30% B grade bonds
+-   10% C grade bonds
 
 ### Agent Node
 -   A client running on hardware with access to block proposal transaction injection.
