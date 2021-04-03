@@ -82,6 +82,9 @@ Validator balance portioning between the development fee, bond holders, and node
     -   Token Balance
         -   Implied Value
     -   Trigger Withdrawal
+    -   Renewals
+        - Propose/Vote
+        - Buyout no-votes and absent-votes
 -   **Create New Validator Bond**
     -   Mirror of the official Ethereum deposit introduction
     -   Define terms, upload deposit.json, commit stake
