@@ -26,6 +26,6 @@
   },
   "homepage": "https://github.com/Tristannn1337/Ivory#readme",
   "dependencies": {
-    "@openzeppelin/contracts": "^3.4.1"
+    "@openzeppelin/contracts": "^4.0.0"
   }
 }

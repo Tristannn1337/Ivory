@@ -31,8 +31,8 @@ Node Operator creates Validator Bonds with terms they desire(principal, maturity
     -   The amount of ETH that the operator is raising out of 32.
     -   Limited to increments of 0.5 ether?
     -   Maximum of 30, minimum of 1
--   **Maturity** (Block)
-    -   The block that the operator is committing to withdrawing the validator balance by.
+-   **Maturity** (Blocks)
+    -   The number of blocks after deposit that the operator is committing to withdrawing the validator balance by.
     -   Enforced by penalties described in the cryptoeconomics withdrawal calculations section.
     -   Operator is given a grace period of +/- 7 days.
     -   Maximum of 30 years, minimum of 1 month
@@ -43,18 +43,18 @@ Node Operator creates Validator Bonds with terms they desire(principal, maturity
 
 ### Withdrawal Calculations
 Validator balance portioning between the development fee, bond holders, and node operator upon validator exit and withdrawal.
--   `grace_period = 50000` _Hardcoded to +/- 7 days, based roughly on the longest expected period of nonfinality in a worst case scenario (2 weeks)._
--   `principal_yield =  APR / (total_blocks * 12 / 60 / 60 / 24 / 365) * principal`
+-   `grace_period = 7 days` _Hardcoded and based roughly on the longest expected period of nonfinality in a worst case scenario (2 weeks)._
+-   `principal_yield =  APR / (total_blocks / 1 year) * principal`
 -   `normalized_time_to_maturity = max(blocks_until_maturity - grace_period, 0) / maturity_term`
--   `early_withdrawal_penalty = (withdrawal_balance - 32 - principal_yield) * pow(normalized_time_to_maturity, 2)` _If a validator balance is withdrawn before the maturity block, a penalty is applied based on the number of blocks left until the maturity block with a quadratic bias towards lower penalties. The operator doesn't lose any of their own stake unless they were slashed by the network, in which case the slash is magnified._
--   `excess_rewards = (withdrawal_balance - 32) / total_blocks * max(blocks_past_maturity - grace_period, 0)` _If a validator balance is withdrawn past the maturity block, all additional rewards are allocated to the bond holders on top of APR being applied to the total duration._
--   `rewards_total = principal_yield + abs(early_withdrawal_penalty) + excess_rewards`
+-   `early_withdrawal_penalty = max(withdrawal_balance - 32 - principal_yield, 0) * pow(normalized_time_to_maturity, 2)` _If a validator balance is withdrawn before the maturity block, a penalty is applied based on the number of blocks left until the maturity block with a quadratic bias towards lower penalties. The operator doesn't lose any of their own stake unless they were slashed by the network, in which case the slash is magnified._
+-   `excess_rewards = max(withdrawal_balance - 32, 0) / total_blocks * max(blocks_past_maturity - grace_period, 0)` _If a validator balance is withdrawn past the maturity block, all additional rewards are allocated to the bond holders on top of APR being applied to the total duration._
+-   `rewards_total = principal_yield + early_withdrawal_penalty + excess_rewards`
 -   `final_development_fee = principal + rewards_total < withdrawal_balance && is_dev_fee_active ? rewards_total * 0.005 : 0` *0.5% development fee is taken out as long as the bond doesn't fail to deliver and if is_dev_fee_active when less than 30 years have passed since contract deployment and less than 100,000 ether in fees have been collected.*
 -   `final_bond_value = min(principal + rewards_total - final_development_fee, withdrawal_balance)`
 -   `final_operator_balance = withdrawal_balance - final_bond_value`
 
 ### Design Considerations
--   Ivory Ink's exact design and mechanics hinge on the final withdrawal spec supporting the means for smart contracts to attribute a withdrawal balance to a specific validator. 
+-   The exact design and mechanics Ivory Ink hinges on the final withdrawal spec supporting the means for smart contracts to attribute a withdrawal balance to a specific validator. 
 -   Could the Ivory Ink bonds be issued directly into an L2 shared with Ivory Bazaar and Ivory Parade?
 -   Validators will likely be allowed to withdraw excess balance on each proposal
     -   How would the contract know which validator the ether came from?
