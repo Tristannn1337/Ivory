@@ -53,16 +53,11 @@ Validator balance portioning between the development fee, bond holders, and node
 ### Design Considerations
 -   The exact design and mechanics Ivory Ink hinges on the final withdrawal spec supporting the means for smart contracts to attribute a withdrawal balance to a specific validator. 
 -   Could the Ivory Ink bonds be issued directly into an L2 shared with Ivory Bazaar and Ivory Parade?
--   Validators will likely be allowed to withdraw excess balance on each proposal
-    -   How would the contract know which validator the ether came from?
-        -   Seems likely the msg.sender would be the validator
-    -   Makes exiting less necessary...
-        -   But partial NFT ownership over NFT's share of rewards becomes tricky...
-        -   Should play with solutions in code
+-   Validators will likely be allowed to withdraw excess balance on each proposal.
 -   Validator bond renewal
     -   Bondholders act as a mini-DAO for renewal proposals. 
     -   Renewal proposals may only be put up for a vote by the operator.
-    -   May only occur before `maturity - grace_period - 14_days` and pass before `maturity - grace_period`.
+    -   May only occur before `maturity - grace_period - 14 days` and pass before `maturity - grace_period`.
     -   Require buyout of no-votes and absent votes by either operator or by yes-votes, with favor given to yes-votes.
     -   Renewal fails if voting ends without enough ether to cover buyout no-votes and absent votes.
 -   Should bond tokens represent incements of 0.5 ether so that the maximum number of individual balances is <64?
