@@ -6,19 +6,19 @@ An Ethereum Validator Bond Ecosystem
 
 
 ## Problem
-Ethereum needs a pooled staking protocol that, if it were to be used by every single validator in the ecosystem, would not begin to challenge Ethereum's legitimacy. All existing staking pools involve either a centralized authority or DAO governance when all we need is a simple protocol that facilitates a market between node operators and ether holders. Specifically, we need a protocol that:
+Ethereum needs a pooled staking protocol that, if it were to be used by every single validator in the ecosystem, would not begin to challenge Ethereum's legitimacy. Specifically, we need a protocol that:
 -   Involves minimum possible trust
 -   Is fully decentralized
 -   Is minimally regulated, allowing the market to dictate risks and rewards
--   Facilitates stake liquidity back to ether holders
--   Facilitates tokenized staking for casual ETH holders
+-   Facilitates stake liquidity back to investors
+-   Facilitates simple tokenized staking for everyone
 
 
 ## Proposal
 Allow Node Operators to raise funds by selling Validator Bonds to individuals who wish to benefit from Validator staking without running a node of their own. The protocol is made up of three parts:
-1. Standardize the **issuing and redeeming** of Validator Bonds with **Ivory Ink**.
-2. Facilitate a market for **selling and purchasing** Validator Bonds with **Ivory Bazaar**.
-3. Create a **tokenized fund** of Validator Bonds with **Ivory Parade**.
+1. Standardize the **issuing and redeeming** of Validator Bonds with **Ivory Ink**, a pure cryptoeconomic foundational protocol.
+2. Facilitate a market for **selling and purchasing** Validator Bonds with **Ivory Bazaar**, a basic protocol for facilitating liquidity.
+3. Create a **tokenized fund** of Validator Bonds with **Ivory Parade**, a decentralized fund manager.
 
 
 ## 1. Ivory Ink - Validator Bonds
@@ -93,7 +93,7 @@ Validator balance portioning between the development fee, bond holders, and node
 ## 2. Ivory Bazaar - Bond Marketplace
 Facilitates transparent and educated transactions of Ivory Ink validator bonds and gives buyers an avenue to generate demand for the specific terms they desire by placing buy orders that Node Operators can fill directly.
 
-### Quality Rating (WORK IN PROGRESS)
+### Quality Rating (WORK IN PROGRESS) (SHOULD MAYBE BE DAO-DRIVEN?)
 A score derived from bond terms to sort and simplify bond selection by individuals or by Ivory Parade.
 -   Principal
     -   **A** =< 14
@@ -138,14 +138,14 @@ A score derived from bond terms to sort and simplify bond selection by individua
 
 
 ## 3. Ivory Parade - Tokenized Fund
-Facilitates tokenized staking by distilling the complexity of the Ivory Bazaar down into a single token that represents ownership over a pool of Ivory Ink validator bonds that are managed trustlessly by Agent Nodes who do nothing more than watch for opportunities to trigger parameterless Ivory Parade functions when it would result in a reward to the operator.
+Facilitates tokenized staking by distilling the complexity of the Ivory Bazaar down into a single token that represents ownership over a pool of Ivory Ink validator bonds that are managed trustlessly by Agent Nodes who are incentivised to watch for opportunities and trigger parameterless Ivory Parade functions.
 -   Purchases Ivory Ink validator bonds of varying quality ratings according to fund allocation settings and prioritizes bonds that distribute maturity dates evenly throughout time.
 -   Votes yes on bond renewals when liquidity isn't needed by token holders with outstanding redemption orders.
 -   Redeems bond balances back into the deposit pool when available.
 -   NAV is calculated by the implied value of the underlying bonds plus the deposit pool balance over the number of tokens issued.
 -   Minimal management fee regularly taken from fund profits to support and incentivize agent nodes.
 
-### Fund Allocation (WORK IN PROGRESS)
+### Fund Allocation (WORK IN PROGRESS) (SHOULD MAYBE BE DAO-DRIVEN?)
 -   60% A or A+ grade bonds
 -   30% B grade bonds
 -   10% C grade bonds
