@@ -16,8 +16,8 @@ Ethereum needs a pooled staking protocol that, if it were to be used by every si
 
 ## Proposal
 Allow Node Operators to raise funds by selling Validator Bonds to individuals who wish to benefit from Validator staking without running a node of their own. The protocol is made up of three parts:
-1. Standardize the **issuing and redeeming** of Validator Bonds with **Ivory Ink**, a pure cryptoeconomic foundational protocol.
-2. Facilitate a market for **selling and purchasing** Validator Bonds with **Ivory Bazaar**, a basic protocol for facilitating liquidity.
+1. Standardize the **issuing and redeeming** of Validator Bonds with **Ivory Ink**, a pure cryptoeconomic protocol.
+2. Facilitate a market for **selling and purchasing** Validator Bonds with **Ivory Bazaar**, a basic liquidity protocol.
 3. Create a **tokenized fund** of Validator Bonds with **Ivory Parade**, a decentralized fund manager.
 
 
