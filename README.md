@@ -1,6 +1,3 @@
-![Ivory Protocol](https://github.com/Tristannn1337/Ivory/blob/main/LogoV1.png)
-
-
 # The Ivory Protocol
 An Ethereum Validator Bond Ecosystem
 
