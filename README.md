@@ -62,6 +62,7 @@ Validator balance portioning between the development fee, bond holders, and node
     -   Renewal fails if voting ends without enough ether to cover buyout no-votes and absent votes.
 -   Should bond tokens represent incements of 0.5 ether so that the maximum number of individual balances is <64?
     -   Not sure if necessary to put limits on maximum contract execution time
+-   Escrow balances can be communicated through tokens read by wallets...
 
 ### Web dApp
 -   **ETH Wallet**
@@ -85,34 +86,35 @@ Validator balance portioning between the development fee, bond holders, and node
 ## 2. Ivory Bazaar - Bond Marketplace
 Facilitates transparent and educated transactions of Ivory Ink validator bonds and gives buyers an avenue to generate demand for the specific terms they desire by placing buy orders that Node Operators can fill directly.
 
-### Quality Rating (WORK IN PROGRESS) (SHOULD MAYBE BE DAO-DRIVEN?)
+### Quality Rating
 A score derived from bond terms to sort and simplify bond selection by individuals or by Ivory Parade.
--   Principal
-    -   **A** =< 14
-    -   **B** =< 22
-    -   **C** =< 28
-    -   **D** > 28
--   APR
-    -   **A** >= 0.05
-    -   **B** >= 0.04
-    -   **C** >= 0.03
-    -   **D** < 0.03
--   Maturity
-    -   **A** >= 1_year
-    -   **B** >= 6_months
-    -   **C** >= 3_months
-    -   **D** < 3_months
--   Overall Grade Interpretation
-    -   **AAA** = **A+ Grade** _grade only possible with AAA rating_
-    -   **ABA** = **A Grade**
-    -   **ABB** = **B Grade**
-    -   **ACA** = **C Grade** _a C rating on any term results in a maximum C grade_
-    -   **BBB** = **C Grade**
-    -   **ADA** = **D Grade** _a D rating on any term results in a maximum D grade_
-    -   **ABC** = **D Grade**
-    -   **ACC** = **D Grade**
-    -   **BDD** = **F Grade**
-    -   **BCD** = **F Grade**
+-   Could be DAO driven
+-   Could possibly be hardcoded
+-   Could be replaced with something else entirely...
+
+### Tokenomics Ideas
+Incorporating an IVRY token would encourage participation in the protocol and is powerful for funding.
+-   IVRY to list orders.
+    -   Order sorting reflects amount of IVRY instead of quality rating.
+    -   Would also give match priority to orders with higher IVRY amounts.
+    -   IVRY could be burnt... OR it could be given to the person on the other side of the transaction?
+        -   Increases ecosystem velocity
+        -   Reduces or eliminates exploitability
+        -   Becomes a 5th bond term of sorts
+        -   Interesting because you're paying people to take your order... like layer1 transactions...
+    -   Minimum 0.000000000000000001 IVRY (smallest possible number without reaching zero)
+-   Stake IVRY to issue Ivory Ink bonds.
+    -   On failure to deliver, staked IVRY is given to token holders.
+    -   Amount of IVRY staked becomes a 4th configurible bond term
+-   Reward operators who behave by minting `stake * (APR / maturity)` new IVRY into their account on withdrawal.
+    -   Empowers reliable operators to burn more IVRY on listing orders, sorting them to the top.
+    -   Kind of an interesting indirect reputation market.
+    -   definition of behaving:
+        -   did not fail to deliver
+        -   did not withdraw early (outside of grace period)
+        -   did not withdraw late (outside of grace period)
+-   Quality Rating DAO Power
+    -   Can suggest and vote on changes to the quality ratings applied to bonds
 
 ### Web dApp
 -   **Order Book Visualizer**
@@ -162,6 +164,11 @@ Facilitates tokenized staking by distilling the complexity of the Ivory Bazaar d
 
 
 ## Additional Information
+There's probably two phases of this project...
+-   Phase 1 is just Ivory Ink and Ivory Bazaar
+-   Phase 2 is Ivory Parade
+-   It's possible that Phase 2 could be replaced by a partnership with another protocol
+
 Everything about this project is a work in progress and subject to change.
 
 0x2894690AC5Fcdc82aaa372e8bf85797C7e7B577C
