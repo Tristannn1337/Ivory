@@ -65,6 +65,7 @@ Validator balance portioning between the development fee, bond holders, and node
 -   Escrow balances can be communicated through tokens read by wallets...
 
 ### Web dApp
+TODO: Replace with mockup
 -   **ETH Wallet**
     -   Deposit
     -   Withdraw
@@ -117,6 +118,7 @@ Incorporating an IVRY token would encourage participation in the protocol and is
     -   Can suggest and vote on changes to the quality ratings applied to bonds
 
 ### Web dApp
+TODO: Replace with mockup
 -   **Order Book Visualizer**
     -   Quality Rating
     -   Intrinsic Value
@@ -153,6 +155,7 @@ Facilitates tokenized staking by distilling the complexity of the Ivory Bazaar d
 -   Failed actions cause agent to lose their gas money, intentionally penalizing them.
 
 ### Web dApp
+TODO: Replace with mockup
 -   **NAV Graph**
     -   Deposit Ether
 -   **Inflow-Outflow Graph**
