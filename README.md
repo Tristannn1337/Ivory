@@ -19,11 +19,11 @@ Allow Node Operators to raise funds by selling Validator Bonds to individuals wh
 
 
 ## 1. Ivory Ink - Validator Bonds
-Node Operator creates Validator Bonds with terms they desire(principal, maturity, APR) by making their validator deposits through the Ivory Ink dApp. This sends their validator into the activation queue and issues bond tokens back to the Node Operator. Upon validator exit and withdrawal, the validator balance is released back into Ivory Ink and portioned out between token holders and the Node Operator. 
+Node Operator creates **Validator Bonds** with terms they desire(principal, maturity, APR) by making their validator deposits through the Ivory Ink dApp. This sends their validator into the activation queue and issues bond tokens back to the Node Operator. Upon validator exit and withdrawal, the validator balance is released back into Ivory Ink and portioned out between token holders and the Node Operator. 
 -   To enforce liquidity for bondholders, Ivory Ink will penalize operators who exit their bonded validator either too early or too late. 
 -   To reduce validator churn on the network, bond terms may be renewed by bondholders before maturity.
 
-### Bond Terms
+### Validator Bond Terms
 -   **Principal** (ETH)
     -   The amount of ETH that the operator is raising out of 32.
     -   Limited to increments of 0.5 ether?
@@ -39,7 +39,7 @@ Node Operator creates Validator Bonds with terms they desire(principal, maturity
     -   Maximum of 0.10, minimum of 0.01
 
 ### Withdrawal Calculations
-Validator balance portioning between the development fee, bond holders, and node operator upon validator exit and withdrawal.
+Validator balance portioning between the bond holders and node operator upon validator exit and withdrawal.
 -   `grace_period = 7 days` _Hardcoded and based roughly on the longest expected period of nonfinality in a worst case scenario (2 weeks)._
 -   `principal_yield =  APR / (total_blocks / 1 year) * principal`
 -   `normalized_time_to_maturity = max(blocks_until_maturity - grace_period, 0) / maturity_term`
@@ -63,6 +63,7 @@ Validator balance portioning between the development fee, bond holders, and node
 -   Should bond tokens represent incements of 0.5 ether so that the maximum number of individual balances is <64?
     -   Not sure if necessary to put limits on maximum contract execution time
 -   Escrow balances can be communicated through tokens read by wallets...
+-   Emphasis on cryptoeconomics is placed on this piece of the protocol to ensure the highest level of security possible. There is no DAO, no investment token, the contracts are not upgradable. Ivory Ink is designed with the intention of being the bedrock and minimum viable protocol around which all other protocol features may be built.
 
 ### Web dApp
 TODO: Replace with mockup
@@ -93,27 +94,38 @@ A score derived from bond terms to sort and simplify bond selection by individua
 -   Could possibly be hardcoded
 -   Could be replaced with something else entirely...
 
-### Tokenomics Ideas
-Incorporating an IVRY token would encourage participation in the protocol and is powerful for funding.
--   IVRY to list orders.
-    -   Order sorting reflects amount of IVRY instead of quality rating.
-    -   Would also give match priority to orders with higher IVRY amounts.
-    -   IVRY could be burnt... OR it could be given to the person on the other side of the transaction?
-        -   Increases ecosystem velocity
-        -   Reduces or eliminates exploitability
-        -   Becomes a 5th bond term of sorts
-        -   Interesting because you're paying people to take your order... like layer1 transactions...
-    -   Minimum 0.000000000000000001 IVRY (smallest possible number without reaching zero)
+### IVRY Token
+Intentions:
+-   Promote and retain operators who are good at their job.
+-   Incentivise an ecosystem of market makers on Ivory Bazaar.
+-   Voting in the Ivory Bazaar Minimum-Governance-DAO.
+    -   Only function currently designed is to manage the bond quality rating system.
+-   Additionally, there are a couple more early-stage intentions:
+    -   Incentivise early adopters to learn about and participate in the ecosystem through marketing events with airdrops.
+    -   Fund development.
+
+### Tokenomics
+Incorporating an IVRY token incentivises participation in the protocol and funds development.
+
+-   Required IVRY offering to list orders.
+    -   Minimum 0.0001 IVRY
+    -   Incentivises liquidity by paying people to fill orders.
+    -   Orders are priority sorted based on the amount of IVRY offered.
+        -   Orders with the highest IVRY offerings appear at the top of the order list.
+        -   Orders with identical terms but less IVRY offered are not sold until all orders with higher IVRY are filled.
+
 -   Stake IVRY to issue Ivory Ink bonds.
     -   On failure to deliver, staked IVRY is given to token holders.
     -   Amount of IVRY staked becomes a 4th configurible bond term
+
 -   Reward operators who behave by minting `stake * (APR / maturity)` new IVRY into their account on withdrawal.
-    -   Empowers reliable operators to burn more IVRY on listing orders, sorting them to the top.
-    -   Kind of an interesting indirect reputation market.
+    -   Encourages operators to spend IVRY more freely when listing orders, effectively giving better operators better service.
+        -   Kind of an interesting indirect reputation market.
     -   definition of behaving:
         -   did not fail to deliver
         -   did not withdraw early (outside of grace period)
         -   did not withdraw late (outside of grace period)
+
 -   Quality Rating DAO Power
     -   Can suggest and vote on changes to the quality ratings applied to bonds
 
@@ -126,6 +138,9 @@ TODO: Replace with mockup
         -   Simple swap
     -   Sell to an existing buy order
         -   Hook into Ivory Ink Deposit dApp and attempt to fill buy order in single transaction
+-   **Open Orders**
+    -   Cancel
+    -   Modify
 -   **Create new Buy Order**
     -   Define either desired terms or a general quality rating
     -   Limit precision of desired terms to encourage buy order bundling?
@@ -138,13 +153,14 @@ Facilitates tokenized staking by distilling the complexity of the Ivory Bazaar d
 -   Purchases Ivory Ink validator bonds of varying quality ratings according to fund allocation settings and prioritizes bonds that distribute maturity dates evenly throughout time.
 -   Votes yes on bond renewals when liquidity isn't needed by token holders with outstanding redemption orders.
 -   Redeems bond balances back into the deposit pool when available.
+-   Effectively acts as a market maker in the Ivory Bazaar.
 -   NAV is calculated by the implied value of the underlying bonds plus the deposit pool balance over the number of tokens issued.
--   Minimal management fee regularly taken from fund profits to support and incentivize agent nodes.
+-   Minimal fund token inflation used to reward agent nodes who perform management duties.
+    -   Using fund tokens as reward makes it easier for agent operators to participate in the Ivory Parade DAO
 
-### Fund Allocation (WORK IN PROGRESS) (SHOULD MAYBE BE DAO-DRIVEN?)
--   60% A or A+ grade bonds
--   30% B grade bonds
--   10% C grade bonds
+### Ivory Parade DAO
+-   Fund Token holders may also participate in governance over the fund allocation by proposing and voting on fund allocation and management condition changes.
+-   
 
 ### Agent Node
 -   A client running on hardware with access to block proposal transaction injection.
@@ -170,7 +186,7 @@ TODO: Replace with mockup
 There's probably two phases of this project...
 -   Phase 1 is just Ivory Ink and Ivory Bazaar
 -   Phase 2 is Ivory Parade
--   It's possible that Phase 2 could be replaced by a partnership with another protocol
+-   It's possible that Phase 2 could be nixed in favor of a partnership with another protocol that can handle tokenizing the fund.
 
 Everything about this project is a work in progress and subject to change.
 
