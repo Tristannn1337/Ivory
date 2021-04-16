@@ -2,7 +2,7 @@
 
 
 ## Mission Statement
-Staking pools democratize participation network operation incentives, but time tends to favor centralization and Ethereum relies deeply on decentralization. Ethereum needs a pooled staking protocol that democratizes participation while every validator in the network using it would not begin to challenge Ethereum's legitimacy.
+Staking pools democratize participation in network operation incentives, but time tends to favor centralization and Ethereum relies deeply on decentralization. Ethereum needs a pooled staking protocol that democratizes participation while every validator in the network using it would not begin to challenge Ethereum's legitimacy.
 
 Compared to existing pools, the Ivory Protocol's goal is to be...
 -   Better for Operators
@@ -23,7 +23,7 @@ Compared to existing pools, the Ivory Protocol's goal is to be...
 
 
 ## Overview
-Central to the design of the Ivory Protocol is the idea of a **Validator Bond**, a pure cryptoeconomic agreement node operators can enter into to raise funds for running more validators.
+Central to the design of the Ivory Protocol is the **Validator Bond**, a pure cryptoeconomic agreement node operators can enter into and raise funds for running more validators.
 
 The protocol is made up of three parts:
 1. Standardize the **issuing and redeeming** of Validator Bonds with **Ivory Ink**.
