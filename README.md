@@ -1,21 +1,34 @@
 # The Ivory Protocol
-An Ethereum Validator Bond Ecosystem
 
 
-## Problem
-Ethereum needs a pooled staking protocol that, if it were to be used by every single validator in the ecosystem, would not begin to challenge Ethereum's legitimacy. Specifically, we need a protocol that:
--   Involves minimum possible trust
--   Is fully decentralized
--   Is minimally regulated, allowing the market to dictate risks and rewards
--   Facilitates stake liquidity back to investors
--   Facilitates simple tokenized staking for everyone
+## Mission Statement
+Staking pools democratize participation network operation incentives, but time tends to favor centralization and Ethereum relies deeply on decentralization. Ethereum needs a pooled staking protocol that democratizes participation while every validator in the network using it would not begin to challenge Ethereum's legitimacy.
+
+Compared to existing pools, the Ivory Protocol's goal is to be...
+-   Better for Operators
+    -   Raise more principal and run more validators.
+    -   No competing with priviledged operators.
+    -   No subjecting one self to the whims of a DAO.
+    -   Get paid to fill buy orders.
+-   Better for Stakers
+    -   Best guarantee of liquidity that exists, outside of solo-staking.
+    -   Opportunities for higher yield than anything else that exists, outside of becoming an operator.
+    -   Opportunities for lower risk than anything else that exists.
+    -   The only tokenized staking with a guarantee of liquidity.
+    -   Get paid to fill sell orders.
+-   Better for Ethereum 
+    -   No compromises on decentralization.
+    -   Minimum possible trust.
+    -   Market dictated risks and rewards.
 
 
-## Proposal
-Allow Node Operators to raise funds by selling Validator Bonds to individuals who wish to benefit from Validator staking without running a node of their own. The protocol is made up of three parts:
-1. Standardize the **issuing and redeeming** of Validator Bonds with **Ivory Ink**, a pure cryptoeconomic protocol.
-2. Facilitate a market for **selling and purchasing** Validator Bonds with **Ivory Bazaar**, a basic liquidity protocol.
-3. Create a **tokenized fund** of Validator Bonds with **Ivory Parade**, a decentralized fund manager.
+## Overview
+Central to the design of the Ivory Protocol is the idea of a **Validator Bond**, a pure cryptoeconomic agreement node operators can enter into to raise funds for running more validators.
+
+The protocol is made up of three parts:
+1. Standardize the **issuing and redeeming** of Validator Bonds with **Ivory Ink**.
+2. Facilitate a market for **selling and purchasing** Validator Bonds with **Ivory Bazaar**.
+3. Manage a **tokenized fund** of Validator Bonds with **Ivory Parade**.
 
 
 ## 1. Ivory Ink - Validator Bonds
@@ -101,7 +114,9 @@ Intentions:
 -   Voting in the Ivory Bazaar Minimum-Governance-DAO.
     -   Only function currently designed is to manage the bond quality rating system.
 -   Additionally, there are a couple more early-stage intentions:
-    -   Incentivise early adopters to learn about and participate in the ecosystem through marketing events with airdrops.
+    -   Incentivise early adopters to learn about and participate in the ecosystem through marketing events
+        -   airdrops
+        -   temporary good-behavior incentive boosts
     -   Fund development.
 
 ### Tokenomics
@@ -160,7 +175,6 @@ Facilitates tokenized staking by distilling the complexity of the Ivory Bazaar d
 
 ### Ivory Parade DAO
 -   Fund Token holders may also participate in governance over the fund allocation by proposing and voting on fund allocation and management condition changes.
--   
 
 ### Agent Node
 -   A client running on hardware with access to block proposal transaction injection.
@@ -186,7 +200,7 @@ TODO: Replace with mockup
 There's probably two phases of this project...
 -   Phase 1 is just Ivory Ink and Ivory Bazaar
 -   Phase 2 is Ivory Parade
--   It's possible that Phase 2 could be nixed in favor of a partnership with another protocol that can handle tokenizing the fund.
+    -   It's possible that Phase 2 could be scraped if an another existing protocol decides to take on tokenizing the fund.
 
 Everything about this project is a work in progress and subject to change.
 
