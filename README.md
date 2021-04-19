@@ -7,15 +7,12 @@ Staking pools democratize participation in network operation incentives, but tim
 Compared to existing pools, the Ivory Protocol's goal is to be...
 -   Better for Operators
     -   Raise more principal and run more validators.
-    -   No competing with priviledged operators.
-    -   No subjecting one self to the whims of a DAO.
-    -   Get paid to fill buy orders.
--   Better for Stakers
-    -   Best guarantee of liquidity that exists, outside of solo-staking.
-    -   Opportunities for higher yield than anything else that exists, outside of becoming an operator.
-    -   Opportunities for lower risk than anything else that exists.
-    -   The only tokenized staking with a guarantee of liquidity.
-    -   Get paid to fill sell orders.
+    -   Level playing field for all operators in the protocol.
+    -   No 3rd party governance overhead.
+-   Better for Pool Stakers
+    -   Better guarantee of liquidity.
+    -   Opportunities for higher yield.
+    -   Opportunities for lower risk.
 -   Better for Ethereum 
     -   No compromises on decentralization.
     -   Minimum possible trust.
@@ -201,6 +198,8 @@ There's probably two phases of this project...
 -   Phase 1 is just Ivory Ink and Ivory Bazaar
 -   Phase 2 is Ivory Parade
     -   It's possible that Phase 2 could be scraped if an another existing protocol decides to take on tokenizing the fund.
+
+-   Funding Idea: Sell NFT of protocol logo(s)?
 
 Everything about this project is a work in progress and subject to change.
 
