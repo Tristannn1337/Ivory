@@ -8,11 +8,10 @@ Compared to existing pools, the Ivory Protocol's goal is to be...
 -   Better for Operators
     -   Raise more principal and run more validators.
     -   Level playing field for all operators in the protocol.
-    -   No 3rd party governance overhead.
+    -   Minimal governance overhead.
 -   Better for Pool Stakers
     -   Better guarantee of liquidity.
     -   Opportunities for higher yield.
-        -   Because operators commit to an APR of their own choosing, transaction fees can be included 
     -   Opportunities for lower risk.
 -   Better for Ethereum 
     -   No compromises on decentralization.
