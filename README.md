@@ -10,7 +10,7 @@ Compared to existing pools, the Ivory Protocol's goal is to...
 -   Minimize governance overhead.
 -   Offer stakers a better guarantee of liquidity.
 -   Offer stakers opportunities for higher yield and/or lower risk.
--   Decentralize infrastrcture.
+-   Decentralize infrastructure.
 -   Minimize trust.
 
 
@@ -58,6 +58,7 @@ Emphasis on cryptoeconomics is placed on this piece of the protocol to ensure th
     -   Maximum of 0.10, minimum of 0.01
 
 ### Withdrawal Calculations
+**TODO: convert to code block**
 Validator balance portioning between the NFT bondholder and node operator upon validator exit and withdrawal.
 -   `grace_period = 7 days` _Hardcoded and based roughly on the longest expected period of nonfinality in a worst case scenario (2 weeks)._
 -   `principal_yield =  APR / (min(total_blocks, maturity) / 1 year) * principal` _We only count blocks up until maturity for principal yield. After maturity, all additional rewards are collected in excess_yield and allocated to the bondholder._
@@ -114,10 +115,11 @@ Operator and staker interaction with Ivory Parade from a UX perspective looks al
     -   Control maturity distribution requirements to maintain regular opportunities for staker liquidity.
     -   Set the underwriter fee
     -   Set the management fee
--   Tokenized
+-   Tokenized **TODO: convert to ### header**
     -   Valued without an oracle by keeping a running tally using average APR.
     -   Each time a bond is matched to ether for ParadeETH tokens (ParadeETH is not minted until it has been matched)
         -   **TODO: token value isn't taking into account the underwriter and managment fees**
+        -   **TODO: convert to code block**
         -   `total_bond_count += 1`
         -   `average_apr += (bond_apr - average_apr) / min(total_bond_count, FACTOR)` _from https://stackoverflow.com/a/50854247, FACTOR would be IVRY DAO controlled._
         -   `total_principal += bond_principal`
@@ -130,6 +132,7 @@ Operator and staker interaction with Ivory Parade from a UX perspective looks al
         -   `last_update_block = current_block` 
     -   Each time a bond is liquidated
         -   **TODO: check for delivery failure**
+        -   **TODO: convert to code block**
         -   `token_value += average_apr / ((last_update_block - current_block) / 1 year) * total_principal`
         -   `total_principal -= bond_principal`
         -   `average_apr -= (bond_apr - average_apr) / min(total_bond_count, FACTOR)` _from https://stackoverflow.com/a/50854247, FACTOR would be IVRY DAO controlled._
