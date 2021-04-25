@@ -18,29 +18,28 @@ Compared to existing pools, the Ivory Protocol's goal is to...
 Compared to the typical service-oriented relationship that most if not all existing pools have with stakers, the Ivory Protocol reframes the relationship as operators raising money by issuing bonds to investors.
 Central to the design of the Ivory Protocol is the **Validator Bond NFT**, a tokenized cryptoeconomic agreement node operators can enter into for raising funds to run more validators.
 
-The protocol is made up of three basic parts:
+The protocol is made up of three parts:
 1. The **issuing and redeeming** of Validator Bonds with **Ivory Ink**.
-2. A market for **buying and selling** Validator Bonds with **Ivory Bazaar**.
-3. A **tokenized fund** of Validator Bonds **Ivory Parade**.
+2. A market for **buying and selling** Validator Bonds with **Ivory Bazaar** .
+3. A **tokenized fund** of Validator Bonds with **Ivory Parade**.
 
-### IVRY Token
-Intentions:
--   **Branding**: Operators may pay IVRY to create and update their Ivory Bazaar NFT profile.
+### IVRY
+Emphasis on cryptoeconomics is placed on Ivory Ink to ensure the highest level of security possible. Ivory Ink involves no DAO, no protocol token, and the contracts are not upgradable. Ivory Ink is designed with the intention of being the bedrock and minimum viable protocol around which other protocol features can be built which will involve a DAO, a protocol token, and may invovle upgradable contracts. That said, it is the sincere intention behind the entire design to minimize the influence and necessity of these 3rd parties.
+
+Token Intentions:
+-   **Reputation**: Operators may pay IVRY to create and update their Ivory Bazaar NFT profile.
 -   **Curation**: Assign and adjust bond-term-derived quality ratings in Ivory Bazaar.
 -   **Governance**: Ivory Parade Fund management.
--   Additional early-stage intentions:
-    -   Incentivise early adopters to learn about and participate in the ecosystem
-        -   airdrops
-        -   temporary incentive boosts
-    -   Fund development.
+-   **Growth**: Fund development of the protocol, reward early adopters, and incentivise community participation.
+
+DAO Intentions:
+-   **TODO**
 
 
 ## 1. Ivory Ink
 Node Operator creates a **Validator Bond NFT** with terms they desire(principal, maturity, APR) by making their validator deposits through the Ivory Ink dApp. This sends their validator into the activation queue and issues the NFT to the Node Operator. Upon validator exit and withdrawal, the validator balance is released back into Ivory Ink and portioned out between the NFT bondholder and the Node Operator. 
 -   To enforce liquidity for the bondholder, Ivory Ink penalizes operators who exit their bonded validator too early or too late. 
 -   To reduce validator churn on the network, bond terms may be renewed by the bondholder before maturity.
-
-Emphasis on cryptoeconomics is placed on this piece of the protocol to ensure the highest level of security possible. There is no DAO, no investment token, and the contracts are not upgradable. Ivory Ink is designed with the intention of being the bedrock and minimum viable protocol around which all other Ivory Protocol features may be built.
 
 ### Bond Terms
 -   **Principal** (ETH)
@@ -106,63 +105,63 @@ Tokenized fund managed by the IVRY DAO for casual investors and easy integration
 
 Operator and staker interaction with Ivory Parade from a UX perspective looks almost identical to an Ivory Bazaar Buy/Sell order. Stakers can deposit directly into the fund and stake their tokens for liquidity. Operators can sell bonds directly to the fund and trigger renewal votes when there are no tokens outstanding tokens staked for liquidity. Unlike an Ivory Bazaar Buy/Sell order, stakers may also stake their tokens to collect underwriter fees.
 
-### Fund Properties
--   Managed by the IVRY DAO to...
-    -   Maintain Allocation Tiers
-        -   (min/?)Max principal
-        -   Min(/max?) APR
-        -   reputation-related conditions/restrictions
-    -   Control maturity distribution requirements to maintain regular opportunities for staker liquidity.
-    -   Set the underwriter fee
-    -   Set the management fee
--   Tokenized **TODO: convert to ### header**
-    -   Valued without an oracle by keeping a running tally using average APR.
-    -   Each time a bond is matched to ether for ParadeETH tokens (ParadeETH is not minted until it has been matched)
-        -   **TODO: token value isn't taking into account the underwriter and managment fees**
-        -   **TODO: convert to code block**
-        -   `total_bond_count += 1`
-        -   `average_apr += (bond_apr - average_apr) / min(total_bond_count, FACTOR)` _from https://stackoverflow.com/a/50854247, FACTOR would be IVRY DAO controlled._
-        -   `total_principal += bond_principal`
-        -   `token_value += average_apr / ((last_update_block - current_block) / 1 year) * total_principal`
-        -   `for each depositor while bond_principal > 0,`
-            -   `match_amount = min(depositor.ether_balance, bond_principal)`
-            -   `depositor.token_balance += match_amount / token_value`
-            -   `depositor.ether_balance -= match_amount`
-            -   `bond_principal -= match_amount`
-        -   `last_update_block = current_block` 
-    -   Each time a bond is liquidated
-        -   **TODO: check for delivery failure**
-        -   **TODO: convert to code block**
-        -   `token_value += average_apr / ((last_update_block - current_block) / 1 year) * total_principal`
-        -   `total_principal -= bond_principal`
-        -   `average_apr -= (bond_apr - average_apr) / min(total_bond_count, FACTOR)` _from https://stackoverflow.com/a/50854247, FACTOR would be IVRY DAO controlled._
-        -   `total_bond_count -= 1`
-        -   `bond_rewards = final_bond_value - bond_principal`
-        -   `underwriter_fee = bond_rewards * underwriter_fee`
-        -   `management_fee = bond_rewards * management_fee`
-        -   `fund_ether_balance += bond_rewards - underwriter_fee - management_fee`
-        -   `dao_ether_balance += management_fee`
-        -   `underwriters_ether_balance += underwriter_fee` **TODO: this ain't quite right**
-        -   `last_update_block = current_block`
+Not upgradible - Instead of upgrades, new pools may be added to Ivory Bazaar and old pools may have a shutdown triggered.
+
+### Managed
+The IVRY DAO is responsible for managing the fund by...
+-   Maintaining Allocation Tiers
+    -   (min/?)Max principal
+    -   Min(/max?) APR
+    -   reputation-related conditions/restrictions
+-   Controlling maturity distribution requirements to maintain regular opportunities for staker liquidity.
+-   Controlling the underwriter fee
+-   Underwriter time lock duration
+-   Tagging bonds at risk of delivery failure and choosing when to give up on bonds that have gone on past maturity **TODO: switch to a keeper incentive?**
+-   Controlling the management fee (within strict limitations) **TODO: define limitations**
+    -   Spend ether collected from management fees for IVRY buybacks.
+-   May trigger a shutdown on further deposits, disabling bond renewal votes, forcing liquidation, and allowing only token redemption.
+-   May vote to relenquish all or individual controls, with an auto-relenquish of all controls over N years if no dial is adjusted or if a shutdown is triggered. **TODO: separate the description of IVRY DAO from IVRY Parade**
+
+### Tokenized
+Valued without an oracle by keeping a running tally using average APR.
+-   Each time a bond is matched to ether for ParadeETH tokens (ParadeETH is not minted until it has been matched)
+    -   **TODO: token value isn't taking into account the underwriter and managment fees**
+    -   **TODO: convert to code block**
+    -   `total_bond_count += 1`
+    -   `average_apr += (bond_apr - average_apr) / min(total_bond_count, FACTOR)` _from https://stackoverflow.com/a/50854247, FACTOR would be IVRY DAO controlled._
+    -   `total_principal += bond_principal`
+    -   `token_value += average_apr / ((last_update_block - current_block) / 1 year) * total_principal`
+    -   `for each depositor while bond_principal > 0,`
+        -   `match_amount = min(depositor.ether_balance, bond_principal)`
+        -   `depositor.token_balance += match_amount / token_value`
+        -   `depositor.ether_balance -= match_amount`
+        -   `bond_principal -= match_amount`
+    -   `last_update_block = current_block` 
+-   Each time a bond is liquidated
+    -   **TODO: check for delivery failure**
+    -   **TODO: convert to code block**
+    -   `token_value += average_apr / ((last_update_block - current_block) / 1 year) * total_principal`
+    -   `total_principal -= bond_principal`
+    -   `average_apr -= (bond_apr - average_apr) / min(total_bond_count, FACTOR)` _from https://stackoverflow.com/a/50854247, FACTOR would be IVRY DAO controlled._
+    -   `total_bond_count -= 1`
+    -   `bond_rewards = final_bond_value - bond_principal`
+    -   `underwriter_fee = bond_rewards * underwriter_fee`
+    -   `management_fee = bond_rewards * management_fee`
+    -   `fund_ether_balance += bond_rewards - underwriter_fee - management_fee`
+    -   `dao_ether_balance += management_fee`
+    -   `underwriters_ether_balance += underwriter_fee` **TODO: this ain't quite right**
+    -   `last_update_block = current_block`
     
--   Underwriter Staking
-    -   Pool Token holders may stake their pool tokens to collect underwriter fees.
-    -   In the event that a bond fails to deliver, underwriters soak up damages before the pool does.
-    -   Requires a time lock commitment which the underwriter may choose to have renewed automatically.
-    -   In the event that the IVRY DAO flags a bond as being at risk of delivery failure, all underwriters will be locked in until the bond resolves.
-    -   A bond that has exceeded it's grace period for liquidation may be tagged by the IVRY DAO as failing to deliver, which...
-        -   Burns underwriter tokens in proportion to its expected value.
-        -   Removes the bond from the pool and redistributes it to the underwriters in proportion to their pool tokens burned.
-        -   Underwriters are allowed to exit and, if they're lucky, will see the bond eventually deliver granting them all of it's excess rewards.
-    -   A bond that has been withdrawn but failed to deliver will work the same, with the bad bond redistributed to the underwriters as proof of their losses.
--   IVRY DAO Controls
-    -   Underwriter incentive
-    -   Insurance time lock duration
-    -   Can maybe tag bonds as potentially failing to deliver? Which would lock all underwriters from uncommitting until that bond satisfies failure to deliver conditions and underwriter stakes are portioned into the pool?
-    -   May trigger a shutdown on further deposits, disabling bond renewal votes, forcing liquidation, and allowing only token redemption.
-    -   May vote to relenquish all or individual controls, with an auto-relenquish of all controls over N years if no dial is adjusted or if a shutdown is triggered.
--   Not upgradible
-    -   Instead of upgrades, new pools may be added to Ivory Bazaar and old pools may have a shutdown triggered.
+### Underwriter Staking
+-   Pool Token holders may stake their pool tokens to collect underwriter fees.
+-   In the event that a bond fails to deliver, underwriters soak up damages before the pool does.
+-   Requires a time lock commitment which the underwriter may choose to have renewed automatically.
+-   In the event that the IVRY DAO flags a bond as being at risk of delivery failure, all underwriters will be locked in until the bond resolves.
+-   A bond that has exceeded it's grace period for liquidation may be tagged by the IVRY DAO as failing to deliver, which...
+    -   Burns underwriter tokens in proportion to its expected value.
+    -   Removes the bond from the pool and redistributes it to the underwriters in proportion to their pool tokens burned.
+    -   Underwriters are allowed to exit and, if they're lucky, will see the bond eventually deliver granting them all of it's excess rewards.
+-   A bond that has been withdrawn but failed to deliver will work the same, with the bad bond redistributed to the underwriters as proof of their losses.
 
 ### Web dApp
 **TODO: mockup**
