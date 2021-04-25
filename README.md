@@ -2,45 +2,37 @@
 
 
 ## Mission Statement
-Staking pools democratize participation in network operation incentives, but time tends to favor centralization and Ethereum relies deeply on decentralization. Ethereum needs a pooled staking protocol that democratizes participation while every validator in the network using it would not begin to challenge Ethereum's legitimacy.
+Staking pools democratize participation in network operation incentives but do a poor job of decentralizing infrastructure. History has shown that time tends to favor pool centralization and Ethereum relies deeply on infrastructure decentralization. Ethereum needs a pooled staking protocol that democratizes participation while also decentralizing infrastructure such that every validator in the network using it would not begin to challenge Ethereum's legitimacy.
 
-Compared to existing pools, the Ivory Protocol's goal is to be...
--   Better for Operators
-    -   Raise more principal and run more validators.
-    -   Level playing field for all operators in the protocol.
-    -   Minimal governance overhead.
--   Better for Pool Stakers
-    -   Better guarantee of liquidity.
-    -   Opportunities for higher yield.
-    -   Opportunities for lower risk.
--   Better for Ethereum 
-    -   No compromises on decentralization.
-    -   Minimum possible trust.
-    -   Market dictated risks and rewards.
-
-The miner of today who is incentivised to contribute to the network for the price of operating hardware is replaced by the staker of tomorrow who is incentivised to contribute to the network by endorsing a pool at any price they can afford. The market between these stakers and operators should be centralized into a ecosystem of operators playing under on common terms for the contributions of sophisticated and casual stakers alike.
+Compared to existing pools, the Ivory Protocol's goal is to...
+-   Create a single open market where all operators, solo and small business, can compete for staker ether.
+-   Allow solo operators to raise more principal and run more validators.
+-   Minimize governance overhead.
+-   Offer stakers a better guarantee of liquidity.
+-   Offer stakers opportunities for higher yield and/or lower risk.
+-   Decentralize infrastrcture.
+-   Minimize trust.
 
 
 ## Overview
+Compared to the typical service-oriented relationship that most if not all existing pools have with stakers, the Ivory Protocol reframes the relationship as operators raising money by issuing bonds to investors.
 Central to the design of the Ivory Protocol is the **Validator Bond NFT**, a tokenized cryptoeconomic agreement node operators can enter into for raising funds to run more validators.
 
 The protocol is made up of three basic parts:
-1. Standardize the **issuing and redeeming** of Validator Bonds with **Ivory Ink**.
-2. Facilitate a market for **buying and selling** Validator Bonds with **Ivory Bazaar**.
-3. Pool together in a **tokenized fund** of Validator Bonds with **Ivory Parade**.
+1. The **issuing and redeeming** of Validator Bonds with **Ivory Ink**.
+2. A market for **buying and selling** Validator Bonds with **Ivory Bazaar**.
+3. A **tokenized fund** of Validator Bonds **Ivory Parade**.
 
 ### IVRY Token
 Intentions:
--   **Reputation**: Promote and retain operators who are good at their job in Ivory Bazaar.
--   **Curation**: Assign and adjust bond term derived quality ratings in Ivory Bazaar.
--   **Governance**: Community fund management of Ivory Parade.
+-   **Branding**: Operators may pay IVRY to create and update their Ivory Bazaar NFT profile.
+-   **Curation**: Assign and adjust bond-term-derived quality ratings in Ivory Bazaar.
+-   **Governance**: Ivory Parade Fund management.
 -   Additional early-stage intentions:
     -   Incentivise early adopters to learn about and participate in the ecosystem
         -   airdrops
         -   temporary incentive boosts
     -   Fund development.
-
-The IVRY Token is not directly involved with Ivory Ink in order to keep the protocol's foundation as simple and secure as possible.
 
 
 ## 1. Ivory Ink
@@ -93,56 +85,46 @@ Surface fundamental market demands.
 -   Buy/Sell Order Ratings
     -   IVRY DAO controlled score derived from bond terms
 -   Support for Branded Operators
-    -   Uses deposit address as link
-    -   Includes name, image, and a (paid?) verified tag
-    -   Link to Proof of Humanity for democratized KYC
+    -   Operators may pay IVRY to create a brand NFT
+    -   Includes name and link to metadata for an image, description, maybe a website, maybe more
+    -   Hook into Kleros for assigning a verified tag?
+    -   Hook into Proof of Humanity for democratized KYC?
     -   Could also include a reputation of some kind... probably derived from history of good behavior
     -   Would allow operators to get better terms over time and for the ecosystem to support larger ratios of ether to operators.
--   Support for Underwriters
-    -   Stake one NFT to another, shouldering the entire risk of both for a fee on withdrawal of the latter
-    -   Could one also stake to themselves to consume entire risk and collect all rewards?
-    -   If NFTs may be underwritten before they're even purchased, there needs to be a way to maybe buyout the underwriter or something in case of the order going stale?
-    -   Must have liquidity voting rights
-    -   Branded?
 -   Perpetual Renewal Voting
-    -   bond fractions can be staked to force liquidation, or not to imply and allow automatic renewal
-    -   unstaked fractions may still get liquidated
-    -   liquidated fractions sit idle until claimed
--   Requires IVRY stake to list orders.
-    -   Amount of IVRY staked becomes a 4th meta-bond term
-    -   Orders are priority sorted based on the amount of IVRY staked.
-        -   Orders with the highest IVRY stakes appear at the top of the order list.
-        -   Orders with identical terms but less IVRY offered are not sold until all orders with higher IVRY stakes are filled.
-    -   Reward operators who behave by minting `IVRY_stake * (APR / maturity)` new IVRY into their account on withdrawal.
-    -   Encourages operators to spend IVRY more freely when listing orders, effectively giving better operators better service.
-    -   Definition of behaving:
-        -   did not fail to deliver
-        -   did not withdraw early (outside of grace period)
-        -   did not withdraw late (outside of grace period)
-    -   Operators who fail to behave forfeit their IVRY stake to the bondholder.
+    -   Bond fractions can be staked to force liquidation. 
+    -   Without a bond fraction being staked, the operator may trigger an automatic renewal.
+    -   Unstaked fractions may still get liquidated and liquidated fractions sit idle until claimed.
 
 ### Web dApp
 **TODO: mockup**
 
 
 ## 3. Ivory Parade
-Tokenized pooled staking for casual investors and integration with the greater DeFi ecosystem.
+Tokenized pooled staking for casual investors and easy integration with the greater DeFi ecosystem.
 -   Indexed
     -   Flexible buy/sell orders with clamped term requirements and different target allocations
     -   (min/?)Max principal
     -   Min(/max?) APR
-    -   Min(/max?) IVRY stake (Passed to insurance stakers on failure to behave)
--   Tokenized
-    -   Running value counter and discounted average APR to tokenize stake
 -   Liquidity Maximizing
     -   Target maturity date interval allocations
+    -   Maximum staking time allowed per bond
+        -   Less than or equal to underwriter time lock commitment
+        -   Maybe can be more clever about the relationship between underwriter timelocks and max staking time?
+        -   Like... maybe can't renew for length of time greater than the longest underwriter time lock commitment?
+-   Tokenized
+    -   Running value counter plus discounted average APR used to value tokens without an oracle.
 -   Underwriter Staking
     -   Pool Token holders may stake their pool tokens to become pool underwriters.
-    -   Underwriters earn an additional APR on their stake equal to the total token discount over total staked
-    -   In the event that a bond fails to deliver, the underwriters soak up all the damages before the rest of the pool does.
+    -   Underwriters earn an additional APR on their stake equal to the total token discount over total staked.
+    -   In the event that a bond fails to deliver, underwriters soak up damages before the pool does.
     -   Requires a time lock commitment which may be renewed automatically or not.
--   IVRY DAO Controlled
-    -   Index allocation, maturity interval, discount percentage, insurance time lock duration, and IVRY stake dials.
+-   IVRY DAO Controls
+    -   Index allocation
+    -   Maturity interval
+    -   Underwriter incentive
+    -   Insurance time lock duration
+    -   Can maybe tag bonds as potentially failing to deliver? Which would lock all underwriters from uncommitting until that bond satisfies failure to deliver conditions and underwriter stakes are portioned into the pool?
     -   May trigger a shutdown on further deposits, disabling bond renewal votes, forcing liquidation, and allowing only token redemption.
     -   May vote to relenquish all or individual controls, with an auto-relenquish of all controls over N years if no dial is adjusted or if a shutdown is triggered.
 -   Not upgradible
@@ -152,14 +134,14 @@ Tokenized pooled staking for casual investors and integration with the greater D
 **TODO: mockup**
 
 
-## Additional Information
+## Additional Information and Thoughts
 -   The exact design and mechanics Ivory Ink hinges on finalization of the post-merge withdrawal spec.
 -   Would it be possible to release something before withdrawals are unlocked?
     -   It's possible that it could be done with an upgradible Ivory Ink contract whose key is tossed after withdrawals are enabled and any subsequently necessary modifications are made.
     -   Might want to make an Ivory Ink V2 contract without the lingering upgradible pieces for gas price improvements
 -   As much of this that can be on an L2 should be. (Looking at you zkSync)
 -   Validators will likely be allowed to assign the transaction fee coinbase to any address they wish for a period of time after withdrawals are enabled.
-
+-   The miner of today who is incentivised to contribute to the network for the price of operating hardware is replaced by the staker of tomorrow who is incentivised to contribute to the network by endorsing a pool at any price they can afford. The market between these stakers and operators should be centralized into a ecosystem of operators playing under on common terms for the contributions of sophisticated and casual stakers alike.
 
 Everything about this project is a work in progress and subject to change.
 
