@@ -190,3 +190,5 @@ Everything about this project is a work in progress and subject to change.
 -   Keeper-driven Pool
     -   Incentivise Keepers to draw orders directly from the basic order market into a pool
     -   Avoids potentially manipulating/splintering the basic market, but requires much more complexity
+-   Non-tokenized staking for folks who are looking to avoid tax issues
+    -   It could be presented as a savings account with a time lock
