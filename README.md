@@ -54,7 +54,7 @@ Node Operator creates a **Validator Bond NFT** with terms they desire(principal,
         -   May be smart to make the maximum be a function of how long the contract has existed... for example, upon deployment the maximum could be 1 year and over the course of the next 5-10 years the maximum would be interpolated to it's final value of 30. Would allow the contract to stand the test of time before allowing people to make such long term commitments.
 -   **APR** (%)
     -   The reward rate the operator expects from the network, presumably discounted by their commission rate, and guaranteed to the bondholder.
-    -   Maximum of 0.10, minimum of 0.01
+    -   Minimum of 0.01, unbounded maximum
 
 ### Withdrawal Calculations
 **TODO: convert to code block**
