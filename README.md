@@ -1,5 +1,6 @@
 # The Ivory Protocol
 
+NOTE: This project has been abandonded for the time being. Without control over transaction fees or MEV being directed into the validator balance, it becomes unlikely that a primarily smart-contract-driven staking pool design could work due to the risk that proposing blocks has greater value to the operator than the operator's initial stake.
 
 ## Mission Statement
 Staking pools democratize participation in network operation incentives but do a poor job of decentralizing infrastructure. History has shown that time tends to favor pool centralization and Ethereum relies deeply on infrastructure decentralization. Ethereum needs a pooled staking protocol that democratizes participation while also decentralizing infrastructure such that every validator in the network using it would not begin to challenge Ethereum's legitimacy.
