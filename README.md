@@ -24,21 +24,11 @@ The protocol is made up of three parts:
 2. A market for **buying and selling** Validator Bonds with **Ivory Bazaar** .
 3. A **tokenized fund** of Validator Bonds with **Ivory Parade**.
 
-### IVRY
-Emphasis on cryptoeconomics is placed on Ivory Ink to ensure the highest level of security possible. Ivory Ink involves no DAO, no protocol token, and the contracts are not upgradable. Ivory Ink is designed with the intention of being the bedrock and minimum viable protocol around which other protocol features can be built which will involve a DAO, a protocol token, and may invovle upgradable contracts. That said, it is the sincere intention behind the entire design to minimize the influence and necessity of these 3rd parties.
-
-Token Intentions:
--   **Reputation**: Operators may pay IVRY to create and update their Ivory Bazaar NFT profile.
--   **Curation**: Assign and adjust bond-term-derived quality ratings in Ivory Bazaar.
--   **Governance**: Ivory Parade Fund management.
--   **Growth**: Fund development of the protocol, reward early adopters, and incentivise community participation.
-
-DAO Intentions:
--   **TODO**
-
 
 ## 1. Ivory Ink
-Node Operator creates a **Validator Bond NFT** with terms they desire(principal, maturity, APR) by making their validator deposits through the Ivory Ink dApp. This sends their validator into the activation queue and issues the NFT to the Node Operator. Upon validator exit and withdrawal, the validator balance is released back into Ivory Ink and portioned out between the NFT bondholder and the Node Operator. 
+Emphasis on cryptoeconomics is placed on Ivory Ink to ensure the highest level of security possible. Ivory Ink involves no DAO, no protocol token, and the contracts are not upgradable. Ivory Ink is designed with the intention of being the bedrock and minimum viable protocol around which other protocol features can be built which will involve a DAO, a protocol token, and may invovle upgradable contracts.
+
+Using Ivory Ink, a Node Operator creates a **Validator Bond NFT** with terms they desire(principal, maturity, APR) by making their validator deposits through the Ivory Ink dApp. This sends their validator into the activation queue and issues the NFT to the Node Operator. Upon validator exit and withdrawal, the validator balance is released back into Ivory Ink and portioned out between the NFT bondholder and the Node Operator. 
 -   To enforce liquidity for the bondholder, Ivory Ink penalizes operators who exit their bonded validator too early or too late. 
 -   To reduce validator churn on the network, bond terms may be renewed by the bondholder before maturity.
 
@@ -58,7 +48,6 @@ Node Operator creates a **Validator Bond NFT** with terms they desire(principal,
     -   Minimum of 0.01, unbounded maximum
 
 ### Withdrawal Calculations
-**TODO: convert to code block**
 Validator balance portioning between the NFT bondholder and node operator upon validator exit and withdrawal.
 -   `grace_period = 7 days` _Hardcoded and based roughly on the longest expected period of nonfinality in a worst case scenario (2 weeks)._
 -   `principal_yield =  APR / (min(total_blocks, maturity) / 1 year) * principal` _We only count blocks up until maturity for principal yield. After maturity, all additional rewards are collected in excess_yield and allocated to the bondholder._
@@ -74,10 +63,6 @@ Validator balance portioning between the NFT bondholder and node operator upon v
 -   Renewal proposals may only be put up for a vote by the operator.
 -   May only occur before `maturity - grace_period - 14 days` and pass before `maturity - grace_period`.
 -   A bondholder who rejects the proposal may be bought out by the node operator.
-
-### Web dApp
-**TODO: mockup**
-
 
 ## 2. Ivory Bazaar
 Surface fundamental market demands.
@@ -96,9 +81,6 @@ Surface fundamental market demands.
     -   Bond fractions can be staked to force liquidation. 
     -   Without a bond fraction being staked, the operator may trigger an automatic renewal.
     -   Unstaked fractions may still get liquidated and liquidated fractions sit idle until claimed.
-
-### Web dApp
-**TODO: mockup**
 
 
 ## 3. Ivory Parade
@@ -127,7 +109,6 @@ The IVRY DAO is responsible for managing the fund by...
 Valued without an oracle by keeping a running tally using average APR.
 -   Each time a bond is matched to ether for ParadeETH tokens (ParadeETH is not minted until it has been matched)
     -   **TODO: token value isn't taking into account the underwriter and managment fees**
-    -   **TODO: convert to code block**
     -   `total_bond_count += 1`
     -   `average_apr += (bond_apr - average_apr) / min(total_bond_count, FACTOR)` _from https://stackoverflow.com/a/50854247, FACTOR would be IVRY DAO controlled._
     -   `total_principal += bond_principal`
@@ -140,7 +121,6 @@ Valued without an oracle by keeping a running tally using average APR.
     -   `last_update_block = current_block` 
 -   Each time a bond is liquidated
     -   **TODO: check for delivery failure**
-    -   **TODO: convert to code block**
     -   `token_value += average_apr / ((last_update_block - current_block) / 1 year) * total_principal`
     -   `total_principal -= bond_principal`
     -   `average_apr -= (bond_apr - average_apr) / min(total_bond_count, FACTOR)` _from https://stackoverflow.com/a/50854247, FACTOR would be IVRY DAO controlled._
@@ -164,9 +144,6 @@ Valued without an oracle by keeping a running tally using average APR.
     -   Underwriters are allowed to exit and, if they're lucky, will see the bond eventually deliver granting them all of it's excess rewards.
 -   A bond that has been withdrawn but failed to deliver will work the same, with the bad bond redistributed to the underwriters as proof of their losses.
 
-### Web dApp
-**TODO: mockup**
-
 
 ## Additional Information and Thoughts
 -   The exact design and mechanics Ivory Ink hinges on finalization of the post-merge withdrawal spec.
@@ -177,9 +154,11 @@ Valued without an oracle by keeping a running tally using average APR.
 -   Validators will likely be allowed to assign the transaction fee coinbase to any address they wish for a period of time after withdrawals are enabled.
 -   The miner of today who is incentivised to contribute to the network for the price of operating hardware is replaced by the staker of tomorrow who is incentivised to contribute to the network by endorsing a pool at any price they can afford. The market between these stakers and operators should be centralized into a ecosystem of operators playing under on common terms for the contributions of sophisticated and casual stakers alike.
 
-Everything about this project is a work in progress and subject to change.
-
-0x2894690AC5Fcdc82aaa372e8bf85797C7e7B577C
+### Token Intentions
+-   **Reputation**: Operators may pay IVRY to create and update their Ivory Bazaar NFT profile.
+-   **Curation**: Assign and adjust bond-term-derived quality ratings in Ivory Bazaar.
+-   **Governance**: Ivory Parade Fund management.
+-   **Growth**: Fund development of the protocol, reward early adopters, and incentivise community participation.
 
 ### More Bond Product Ideas
 -   Reputation Index Pool
