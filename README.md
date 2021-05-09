@@ -24,10 +24,10 @@ The protocol is made up of three parts:
 
 
 ## 1. Ivory Ink
-Emphasis on cryptoeconomics is placed on Ivory Ink to ensure the highest level of security possible. Ivory Ink involves no DAO, no protocol token, and the contracts are not upgradable. Ivory Ink is designed with the intention of being the bedrock and minimum viable protocol around which other protocol features can be built which will involve a DAO, a protocol token, and may invovle upgradable contracts.
+Ivory Ink involves no DAO, no protocol token, and the contracts are not upgradable. Ivory Ink is designed with the intention of being the bedrock and minimum viable protocol around which other protocol features can be built, primarily by Ivory Bazaar, which will involve a DAO, a protocol token, and upgradable contracts.
 
-Using Ivory Ink, a Node Operator creates a **Validator Bond NFT** with terms they desire(principal, maturity, APR) by making their validator deposits through the Ivory Ink dApp. This sends their validator into the activation queue and issues the NFT to the Node Operator. Upon validator exit and withdrawal, the validator balance is released back into Ivory Ink and portioned out between the NFT bondholder and the Node Operator. 
--   To enforce liquidity for the bondholder, Ivory Ink penalizes operators who exit their bonded validator too early or too late. 
+Using Ivory Ink, a Node Operators create a **Validator Bond NFT** with terms they desire(principal, maturity, APR) by making their validator deposits through the Ivory Ink dApp. Their validator if forwarded into the activation queue and issues the NFT to the Node Operator. Upon validator exit and withdrawal, the validator balance is released back into Ivory Ink and portioned out between the NFT bondholder and the Node Operator. 
+-   To enforce liquidity for the bondholder, Ivory Ink penalizes operators who exit their bonded validator too early or too late.
 -   To reduce validator churn on the network, bond terms may be renewed by the bondholder before maturity.
 
 ### Bond Terms
@@ -47,19 +47,26 @@ Using Ivory Ink, a Node Operator creates a **Validator Bond NFT** with terms the
 
 ### Withdrawal Calculations
 Validator balance portioning between the NFT bondholder and node operator upon validator exit and withdrawal.
--   `grace_period = 7 days` _Hardcoded and based roughly on the longest expected period of nonfinality in a worst case scenario (2 weeks)._
--   `principal_yield =  APR / (min(total_blocks, maturity) / 1 year) * principal` _We only count blocks up until maturity for principal yield. After maturity, all additional rewards are collected in excess_yield and allocated to the bondholder._
--   `excess_yield = max(withdrawal_balance - 32, 0) / total_blocks * max(maturity - total_blocks - grace_period, 0)` _If a validator balance is withdrawn past the maturity block, all additional rewards are allocated to the bondholder._
--   `normalized_time_to_maturity = max(blocks_until_maturity - grace_period, 0) / maturity_term`
--   `early_withdrawal_penalty = max(withdrawal_balance - 32 - principal_yield, 0) * pow(normalized_time_to_maturity, 2)` _If a validator balance is withdrawn before maturity, a penalty is applied based on the number of blocks left until maturity with a quadratic bias towards lower penalties. This penalty will not deduct from the operator's own stake unless they were slashed by the network._
--   `rewards_total = principal_yield + excess_yield + early_withdrawal_penalty`
--   `final_development_fee = principal + rewards_total < withdrawal_balance && is_dev_fee_active ? rewards_total * 0.005 : 0` *0.5% development fee is taken out as long as the bond doesn't fail to deliver and if is_dev_fee_active when less than 30 years have passed since contract deployment and less than 100,000 ether in fees have been collected.*
--   `final_bond_value = min(principal + rewards_total - final_development_fee, withdrawal_balance)`
--   `final_operator_balance = withdrawal_balance - final_bond_value`
+```JavaScript
+// Hardcoded and based roughly on the longest expected period of nonfinality in a worst case scenario (2 weeks).
+GRACE_PERIOD = 7 days
+// We only count blocks up until maturity for principal yield. After maturity, all additional rewards are collected in excess_yield and allocated to the bondholder.
+principal_yield =  APR / (min(total_blocks, maturity) / 1 year) * principal;
+// If a validator balance is withdrawn past the maturity block, all additional rewards are allocated to the bondholder.
+excess_yield = max(withdrawal_balance - 32, 0) / total_blocks * max(maturity - total_blocks - GRACE_PERIOD, 0);
+normalized_time_to_maturity = max(blocks_until_maturity - GRACE_PERIOD, 0) / maturity_term;
+// If a validator balance is withdrawn before maturity, a penalty is applied based on the number of blocks left until maturity with a quadratic bias towards lower penalties. This penalty will not deduct from the operator's own stake unless they were slashed by the network.
+early_withdrawal_penalty = max(withdrawal_balance - 32 - principal_yield, 0) * pow(normalized_time_to_maturity, 2);
+rewards_total = principal_yield + excess_yield + early_withdrawal_penalty;
+// 0.5% development fee is taken out as long as the bond doesn't fail to deliver and if is_dev_fee_active when less than 30 years have passed since contract deployment and less than 100,000 ether in fees have been collected.
+final_development_fee = principal + rewards_total < withdrawal_balance && is_dev_fee_active ? rewards_total * 0.005 : 0;
+final_bond_value = min(principal + rewards_total - final_development_fee, withdrawal_balance);
+final_operator_balance = withdrawal_balance - final_bond_value;
+```
 
 ### Bond Renewal
 -   Renewal proposals may only be put up for a vote by the operator.
--   May only occur before `maturity - grace_period - 14 days` and pass before `maturity - grace_period`.
+-   May only occur before `maturity - GRACE_PERIOD - 14 days` and pass before `maturity - GRACE_PERIOD`.
 -   A bondholder who rejects the proposal may be bought out by the node operator.
 
 ## 2. Ivory Bazaar
