@@ -22,16 +22,18 @@ The protocol is made up of three parts:
 2. A market for **buying and selling** Validator Bonds with **Ivory Bazaar** .
 3. A **tokenized fund** of Validator Bonds with **Ivory Parade**.
 
-Ivory Ink involves no DAO, no protocol token, the contracts are not upgradable, and is designed with the intention of being the minimum viable protocol around which Ivory Bazaar and Ivory Parade may be built.
-Unlike Ivory Ink, Ivory Bazaar and Ivory Parade will involve a DAO, a protocol token, and upgradable contracts. By creating this separation between Ivory Ink and the rest of the protocol, we create a secure foundational commitment to the ecosystem and place clear limitations on the power that any member or developer has over the current state of the ecosystem.
+Ivory Ink involves no DAO, no protocol token, the contracts are not upgradable, and is designed with the intention of being the minimum viable protocol around which Ivory Bazaar and Ivory Parade may be built. By creating this separation between Ivory Ink and the rest of the protocol, we create a secure foundational commitment to the ecosystem and place fundamental limitations on the power that any member or developer has.
 
-IVRY Token Intentions:
+Ivory Bazaar and Ivory Parade will involve the IVRY Token. This token will grant DAO membership , a protocol token, and upgradable contracts.
+The intentions behind the IVRY Token are:
 -   **Reputation**: Operators may pay IVRY to create and update their Ivory Bazaar NFT profile.
--   **Curation**: Assign and adjust bond-term-derived quality ratings in Ivory Bazaar.
--   **Governance**: Ivory Parade Fund management.
+-   **Curation**: Adjust bond-term-derived quality ratings in Ivory Bazaar and Ivory Parade Fund Management.
 -   **Growth**: Fund development of the protocol, reward early adopters, and incentivise community participation.
+-   **Governance**: Approval power over smart contract upgrades, IVRY spending, IVRY buybacks, and fee management.
+-   **Administration**: Trigger emergency procedures in time sensitive situations to make time for governance to respond.
 
-It will be important early on for the IVRY DAO to curate Ivory Bazaar using strict quality ratings in order to appropriately offset the risk that an operator could sell high principal validator bonds without the intention of ever exiting with a balance remaining, a side effect of transaction fees not being directed into a validator's balance and the potential for MEV to play into a significant portion of a validator's profit. It may even be necessary to completely censor certain bond terms
+It will be important early on for the IVRY DAO to curate Ivory Bazaar using strict quality ratings in order to appropriately offset the risk that an operator could sell high principal validator bonds without the intention of ever exiting with a balance remaining, a side effect of transaction fees not being directed into a validator's balance and the potential for MEV to play into a significant portion of a validator's profit. It may be necessary to completely censor certain bond terms from appearing in the market.
+
 
 ## 1. Ivory Ink
 Using Ivory Ink, a Node Operators create a **Validator Bond NFT** with terms they desire(principal, maturity, APR) by making their validator deposits through the Ivory Ink dApp. Their validator if forwarded into the activation queue and issues the NFT to the Node Operator. Upon validator exit and withdrawal, the validator balance is released back into Ivory Ink and portioned out between the NFT bondholder and the Node Operator. 
@@ -113,11 +115,9 @@ Surface fundamental market demands, create a platform for operator reputation, g
 
 
 ## 3. Ivory Parade
-Tokenized fund managed by the IVRY DAO for casual investors and easy integration with the greater DeFi ecosystem.
+Tokenized fund managed by the IVRY DAO for casual investors and easy integration with the greater DeFi ecosystem. This section describes what could be the first iteration, but more ideas for future iterations are listed in the "More Bond Product Ideas" section.
 
 Operator and staker interaction with Ivory Parade from a UX perspective looks almost identical to an Ivory Bazaar Buy/Sell order. Stakers can deposit directly into the fund and stake their tokens for liquidity. Operators can sell bonds directly to the fund and trigger renewal votes when there are no tokens outstanding tokens staked for liquidity. Unlike an Ivory Bazaar Buy/Sell order, stakers may also stake their tokens to collect underwriter fees.
-
-Not upgradible - Instead of upgrades, new pools may be added to Ivory Bazaar and old pools may have a shutdown triggered.
 
 ### Managed
 The IVRY DAO is responsible for managing the fund by...
@@ -130,9 +130,7 @@ The IVRY DAO is responsible for managing the fund by...
 -   Underwriter time lock duration
 -   Tagging bonds at risk of delivery failure and choosing when to give up on bonds that have gone on past maturity **TODO: switch to a keeper incentive?**
 -   Controlling the management fee (within strict limitations) **TODO: define limitations**
-    -   Spend ether collected from management fees for IVRY buybacks.
--   May trigger a shutdown on further deposits, disabling bond renewal votes, forcing liquidation, and allowing only token redemption.
--   May vote to relenquish all or individual controls, with an auto-relenquish of all controls over N years if no dial is adjusted or if a shutdown is triggered. **TODO: separate the description of IVRY DAO from IVRY Parade**
+-   May trigger a shutdown on further deposits or token redeemptions and disabling bond renewal votes.
 
 ### Tokenized
 Valued without an oracle by keeping a running tally using average APR.
@@ -146,7 +144,7 @@ Valued without an oracle by keeping a running tally using average APR.
     
     total_principal += bond_principal
     token_value += average_apr / ((last_update_block - current_block) / 1 year) * total_principal
-    for each depositor while bond_principal > 0
+    for each depositor in pending_depositors while bond_principal > 0
         match_amount = min(depositor.ether_balance, bond_principal)
         depositor.token_balance += match_amount / token_value
         depositor.ether_balance -= match_amount
@@ -171,6 +169,9 @@ Valued without an oracle by keeping a running tally using average APR.
     dao_ether_balance += management_fee
     underwriters_ether_balance += underwriter_fee // TODO: this ain't quite right
     last_update_block = current_block
+
+    // TODO: distribute fund_ether_balance to pending_redeemers, then check if there are pending bonds that could be matched.
+    // Worry about needing to break everything up into separate transactions later.
     ```
     
 ### Underwriter Staking
