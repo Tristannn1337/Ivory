@@ -48,34 +48,34 @@ Using Ivory Ink, a Node Operators create a **Validator Bond NFT** with terms the
 ### Withdrawal Calculations
 Validator balance portioning between the NFT bondholder and node operator upon validator exit and withdrawal.
 ```Solidity
-// NOTE: This is pseudocode and uses floating point math for readability.
+// NOTE: This pseudocode uses floating point math for readability.
 
 // Hardcoded and based roughly on the longest expected period of nonfinality in a worst case scenario (2 weeks).
 GRACE_PERIOD = 7 days
 
 // We only count blocks up until maturity for principal yield.
 // After maturity, all additional rewards are collected in excess_yield and allocated to the bondholder.
-principal_yield =  APR / (min(total_blocks, maturity) / 1 years) * principal;
+principal_yield = APR / (min(total_blocks, maturity) / 1 years) * principal
 
 // If a validator balance is withdrawn past the maturity block, all additional rewards are allocated to the bondholder.
-excess_yield = max(withdrawal_balance - 32, 0) / total_blocks * max(maturity - total_blocks - GRACE_PERIOD, 0);
+excess_yield = max(withdrawal_balance - 32, 0) / total_blocks * max(maturity - total_blocks - GRACE_PERIOD, 0)
 
 // If a validator balance is withdrawn before maturity, a penalty is applied based on the number of blocks left until maturity
 // with a quadratic bias towards lower penalties. This penalty will not deduct from the operator's own stake unless they were
 // slashed by the network.
-normalized_time_to_maturity = max(blocks_until_maturity - GRACE_PERIOD, 0) / maturity_term;
-early_withdrawal_penalty = max(withdrawal_balance - 32 - principal_yield, 0) * pow(normalized_time_to_maturity, 2);
+normalized_time_to_maturity = max(blocks_until_maturity - GRACE_PERIOD, 0) / maturity_term
+early_withdrawal_penalty = max(withdrawal_balance - 32 - principal_yield, 0) * pow(normalized_time_to_maturity, 2)
 
 // Complete totalling of rewards for portioning between the operator, bond, and the development fee
-rewards_total = principal_yield + excess_yield + early_withdrawal_penalty;
+rewards_total = principal_yield + excess_yield + early_withdrawal_penalty
 
 // 0.5% development fee is taken out as long as the bond doesn't fail to deliver and if is_dev_fee_active when less than 30 years
 // have passed since contract deployment and less than 100,000 ether in fees have been collected.
-final_development_fee = principal + rewards_total < withdrawal_balance && is_dev_fee_active ? rewards_total * 0.005 : 0;
+final_development_fee = principal + rewards_total < withdrawal_balance && is_dev_fee_active ? rewards_total * 0.005 : 0
 
-final_bond_value = min(principal + rewards_total - final_development_fee, withdrawal_balance);
+final_bond_value = min(principal + rewards_total - final_development_fee, withdrawal_balance)
 
-final_operator_balance = withdrawal_balance - final_bond_value;
+final_operator_balance = withdrawal_balance - final_bond_value
 ```
 
 ### Bond Renewal
@@ -128,16 +128,19 @@ The IVRY DAO is responsible for managing the fund by...
 Valued without an oracle by keeping a running tally using average APR.
 -   Each time a bond is matched to ether for ParadeETH tokens (ParadeETH is not minted until it has been matched)
     -   **TODO: token value isn't taking into account the underwriter and managment fees**
-    -   `total_bond_count += 1`
-    -   `average_apr += (bond_apr - average_apr) / min(total_bond_count, FACTOR)` _from https://stackoverflow.com/a/50854247, FACTOR would be IVRY DAO controlled._
-    -   `total_principal += bond_principal`
-    -   `token_value += average_apr / ((last_update_block - current_block) / 1 year) * total_principal`
-    -   `for each depositor while bond_principal > 0,`
-        -   `match_amount = min(depositor.ether_balance, bond_principal)`
-        -   `depositor.token_balance += match_amount / token_value`
-        -   `depositor.ether_balance -= match_amount`
-        -   `bond_principal -= match_amount`
-    -   `last_update_block = current_block` 
+    -   ```Solidity
+    total_bond_count += 1
+    // from https://stackoverflow.com/a/50854247, FACTOR would be IVRY DAO controlled.
+    average_apr += (bond_apr - average_apr) / min(total_bond_count, FACTOR)
+    total_principal += bond_principal
+    token_value += average_apr / ((last_update_block - current_block) / 1 year) * total_principal
+    for each depositor while bond_principal > 0
+        match_amount = min(depositor.ether_balance, bond_principal)
+        depositor.token_balance += match_amount / token_value
+        depositor.ether_balance -= match_amount
+        bond_principal -= match_amount
+    last_update_block = current_block
+    ```
 -   Each time a bond is liquidated
     -   **TODO: check for delivery failure**
     -   `token_value += average_apr / ((last_update_block - current_block) / 1 year) * total_principal`
