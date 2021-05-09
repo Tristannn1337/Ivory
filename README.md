@@ -24,11 +24,13 @@ The protocol is made up of three parts:
 
 Ivory Ink involves no DAO, no protocol token, the contracts are not upgradable, and is designed with the intention of being the minimum viable protocol around which Ivory Bazaar and Ivory Parade may be built.
 Unlike Ivory Ink, Ivory Bazaar and Ivory Parade will involve a DAO, a protocol token, and upgradable contracts. By creating this separation between Ivory Ink and the rest of the protocol, we create a secure foundational commitment to the ecosystem and place clear limitations on the power that any member or developer has over the current state of the ecosystem.
--   IVRY Token Intentions
-    -   **Reputation**: Operators may pay IVRY to create and update their Ivory Bazaar NFT profile.
-    -   **Curation**: Assign and adjust bond-term-derived quality ratings in Ivory Bazaar.
-    -   **Governance**: Ivory Parade Fund management.
-    -   **Growth**: Fund development of the protocol, reward early adopters, and incentivise community participation.
+
+IVRY Token Intentions
+-   **Reputation**: Operators may pay IVRY to create and update their Ivory Bazaar NFT profile.
+-   **Curation**: Assign and adjust bond-term-derived quality ratings in Ivory Bazaar.
+-   **Governance**: Ivory Parade Fund management.
+-   **Growth**: Fund development of the protocol, reward early adopters, and incentivise community participation.
+
 It will be important early on for the IVRY DAO to curate Ivory Bazaar using strict quality ratings in order to appropriately offset the risk that an operator could sell high principal validator bonds without the intention of ever exiting with a balance remaining, a side effect of transaction fees not being directed into a validator's balance and the potential for MEV to play into a significant portion of a validator's profit. It may even be necessary to completely censor certain bond terms
 
 ## 1. Ivory Ink
