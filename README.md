@@ -48,6 +48,8 @@ Using Ivory Ink, a Node Operators create a **Validator Bond NFT** with terms the
 ### Withdrawal Calculations
 Validator balance portioning between the NFT bondholder and node operator upon validator exit and withdrawal.
 ```Solidity
+// NOTE: This is pseudocode and uses floating point math for readability.
+
 // Hardcoded and based roughly on the longest expected period of nonfinality in a worst case scenario (2 weeks).
 GRACE_PERIOD = 7 days
 
