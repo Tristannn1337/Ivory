@@ -127,8 +127,9 @@ The IVRY DAO is responsible for managing the fund by...
 ### Tokenized
 Valued without an oracle by keeping a running tally using average APR.
 -   Each time a bond is matched to ether for ParadeETH tokens (ParadeETH is not minted until it has been matched)
-    -   **TODO: token value isn't taking into account the underwriter and managment fees**
-    -   ```Solidity
+    ```Solidity
+    // TODO: token value isn't taking into account the underwriter and managment fees
+
     total_bond_count += 1
     // from https://stackoverflow.com/a/50854247, FACTOR would be IVRY DAO controlled.
     average_apr += (bond_apr - average_apr) / min(total_bond_count, FACTOR)
