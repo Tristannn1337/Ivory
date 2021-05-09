@@ -143,18 +143,21 @@ Valued without an oracle by keeping a running tally using average APR.
     last_update_block = current_block
     ```
 -   Each time a bond is liquidated
-    -   **TODO: check for delivery failure**
-    -   `token_value += average_apr / ((last_update_block - current_block) / 1 year) * total_principal`
-    -   `total_principal -= bond_principal`
-    -   `average_apr -= (bond_apr - average_apr) / min(total_bond_count, FACTOR)` _from https://stackoverflow.com/a/50854247, FACTOR would be IVRY DAO controlled._
-    -   `total_bond_count -= 1`
-    -   `bond_rewards = final_bond_value - bond_principal`
-    -   `underwriter_fee = bond_rewards * underwriter_fee`
-    -   `management_fee = bond_rewards * management_fee`
-    -   `fund_ether_balance += bond_rewards - underwriter_fee - management_fee`
-    -   `dao_ether_balance += management_fee`
-    -   `underwriters_ether_balance += underwriter_fee` **TODO: this ain't quite right**
-    -   `last_update_block = current_block`
+    ```Solidity
+    // TODO: check for delivery failure
+    token_value += average_apr / ((last_update_block - current_block) / 1 year) * total_principal
+    total_principal -= bond_principal
+    // from https://stackoverflow.com/a/50854247, FACTOR would be IVRY DAO controlled.
+    average_apr -= (bond_apr - average_apr) / min(total_bond_count, FACTOR)
+    total_bond_count -= 1
+    bond_rewards = final_bond_value - bond_principal
+    underwriter_fee = bond_rewards * underwriter_fee
+    management_fee = bond_rewards * management_fee
+    fund_ether_balance += bond_rewards - underwriter_fee - management_fee
+    dao_ether_balance += management_fee
+    underwriters_ether_balance += underwriter_fee // TODO: this ain't quite right
+    last_update_block = current_block
+    ```
     
 ### Underwriter Staking
 -   Pool Token holders may stake their pool tokens to collect underwriter fees.
