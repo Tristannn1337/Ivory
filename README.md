@@ -47,11 +47,11 @@ Using Ivory Ink, a Node Operators create a **Validator Bond NFT** with terms the
 
 ### Withdrawal Calculations
 Validator balance portioning between the NFT bondholder and node operator upon validator exit and withdrawal.
-```JavaScript
+```Solidity
 // Hardcoded and based roughly on the longest expected period of nonfinality in a worst case scenario (2 weeks).
 GRACE_PERIOD = 7 days
 // We only count blocks up until maturity for principal yield. After maturity, all additional rewards are collected in excess_yield and allocated to the bondholder.
-principal_yield =  APR / (min(total_blocks, maturity) / 1 year) * principal;
+principal_yield =  APR / (min(total_blocks, maturity) / 1 years) * principal;
 // If a validator balance is withdrawn past the maturity block, all additional rewards are allocated to the bondholder.
 excess_yield = max(withdrawal_balance - 32, 0) / total_blocks * max(maturity - total_blocks - GRACE_PERIOD, 0);
 normalized_time_to_maturity = max(blocks_until_maturity - GRACE_PERIOD, 0) / maturity_term;
