@@ -50,17 +50,29 @@ Validator balance portioning between the NFT bondholder and node operator upon v
 ```Solidity
 // Hardcoded and based roughly on the longest expected period of nonfinality in a worst case scenario (2 weeks).
 GRACE_PERIOD = 7 days
-// We only count blocks up until maturity for principal yield. After maturity, all additional rewards are collected in excess_yield and allocated to the bondholder.
+
+// We only count blocks up until maturity for principal yield.
+// After maturity, all additional rewards are collected in excess_yield and allocated to the bondholder.
 principal_yield =  APR / (min(total_blocks, maturity) / 1 years) * principal;
+
 // If a validator balance is withdrawn past the maturity block, all additional rewards are allocated to the bondholder.
 excess_yield = max(withdrawal_balance - 32, 0) / total_blocks * max(maturity - total_blocks - GRACE_PERIOD, 0);
+
 normalized_time_to_maturity = max(blocks_until_maturity - GRACE_PERIOD, 0) / maturity_term;
-// If a validator balance is withdrawn before maturity, a penalty is applied based on the number of blocks left until maturity with a quadratic bias towards lower penalties. This penalty will not deduct from the operator's own stake unless they were slashed by the network.
+
+// If a validator balance is withdrawn before maturity, a penalty is applied based on the number of blocks left until maturity
+// with a quadratic bias towards lower penalties. This penalty will not deduct from the operator's own stake unless they were
+// slashed by the network.
 early_withdrawal_penalty = max(withdrawal_balance - 32 - principal_yield, 0) * pow(normalized_time_to_maturity, 2);
+
 rewards_total = principal_yield + excess_yield + early_withdrawal_penalty;
-// 0.5% development fee is taken out as long as the bond doesn't fail to deliver and if is_dev_fee_active when less than 30 years have passed since contract deployment and less than 100,000 ether in fees have been collected.
+
+// 0.5% development fee is taken out as long as the bond doesn't fail to deliver and if is_dev_fee_active when less than 30 years
+// have passed since contract deployment and less than 100,000 ether in fees have been collected.
 final_development_fee = principal + rewards_total < withdrawal_balance && is_dev_fee_active ? rewards_total * 0.005 : 0;
+
 final_bond_value = min(principal + rewards_total - final_development_fee, withdrawal_balance);
+
 final_operator_balance = withdrawal_balance - final_bond_value;
 ```
 
