@@ -58,13 +58,13 @@ principal_yield =  APR / (min(total_blocks, maturity) / 1 years) * principal;
 // If a validator balance is withdrawn past the maturity block, all additional rewards are allocated to the bondholder.
 excess_yield = max(withdrawal_balance - 32, 0) / total_blocks * max(maturity - total_blocks - GRACE_PERIOD, 0);
 
-normalized_time_to_maturity = max(blocks_until_maturity - GRACE_PERIOD, 0) / maturity_term;
-
 // If a validator balance is withdrawn before maturity, a penalty is applied based on the number of blocks left until maturity
 // with a quadratic bias towards lower penalties. This penalty will not deduct from the operator's own stake unless they were
 // slashed by the network.
+normalized_time_to_maturity = max(blocks_until_maturity - GRACE_PERIOD, 0) / maturity_term;
 early_withdrawal_penalty = max(withdrawal_balance - 32 - principal_yield, 0) * pow(normalized_time_to_maturity, 2);
 
+// Complete totalling of rewards for portioning between the operator, bond, and the development fee
 rewards_total = principal_yield + excess_yield + early_withdrawal_penalty;
 
 // 0.5% development fee is taken out as long as the bond doesn't fail to deliver and if is_dev_fee_active when less than 30 years
