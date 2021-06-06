@@ -14,7 +14,7 @@ Compared to existing pools, the Ivory Protocol's goal is to...
 
 
 ## Overview
-Compared to the typical service-oriented relationship that most if not all existing pools have with stakers, the Ivory Protocol reframes the relationship as operators raising money by issuing bonds to investors.
+Compared to the typical service-oriented relationship that most if not all existing pools have with stakers, the Ivory Protocol reframes the relationship as operators raising money by issuing bonds to investors collateralized by their withdrawal balance.
 Central to the design of the Ivory Protocol is the **Validator Bond NFT**, a tokenized cryptoeconomic agreement node operators can enter into for raising funds to run more validators.
 
 The protocol is made up of three parts:
@@ -56,7 +56,6 @@ Using Ivory Ink, a Node Operators create a **Validator Bond NFT** with terms the
 
 ### Withdrawal Calculations
 Validator balance portioning between the NFT bondholder and node operator upon validator exit and withdrawal.
-**TODO: decouple calculations from withdrawal balance. With transaction fees existing outside of the validator balance, there is insufficient protocol-level coupling to inherit.**
 
 ```Solidity
 // NOTE: This pseudocode uses floating point math for readability.
@@ -66,19 +65,22 @@ Validator balance portioning between the NFT bondholder and node operator upon v
 principal_yield = APR / (min(total_blocks, maturity) / 1 years) * principal
 
 // If a validator balance is withdrawn past the maturity block, all additional rewards are allocated to the bondholder.
+// Determined by taking average rewards per block mulultipied by number of blocks past maturity
+// At a minimum, these rewards include attestation rewards, proposal rewards, and some transaction fees (0x02).
+// MEV may also be included if the operator choses. Incentive to do so should come from the Ivory Bazaar reputation system if possible. (flashbots verified?)
 excess_yield = max(withdrawal_balance - 32, 0) / total_blocks * max(maturity - total_blocks - grace_period, 0)
 
 // If a validator balance is withdrawn before maturity, a penalty is applied based on the number of blocks left until maturity
 // with a quadratic bias towards lower penalties. This penalty will not deduct from the operator's own stake unless they were
 // slashed by the network.
-normalized_time_to_maturity = max(blocks_until_maturity - grace_period, 0) / maturity_term
-early_withdrawal_penalty = max(withdrawal_balance - 32 - principal_yield, 0) * pow(normalized_time_to_maturity, 2)
+_normalized_time_to_maturity = max(blocks_until_maturity - grace_period, 0) / maturity_term
+early_withdrawal_penalty = max(withdrawal_balance - 32 - principal_yield, 0) * pow(_normalized_time_to_maturity, 2)
 
 // Complete totalling of rewards for portioning between the operator, bond, and the development fee
 rewards_total = principal_yield + excess_yield + early_withdrawal_penalty
 
-// 0.5% development fee is taken out as long as the bond doesn't fail to deliver and if is_dev_fee_active when less than 30 years
-// have passed since contract deployment and less than 100,000 ether in fees have been collected.
+// A 0.5% development fee is taken out as long as the bond doesn't fail to deliver when is_dev_fee_active.
+// is_dev_fee_active when less than 30 years have passed since contract deployment and less than 100,000 ether in fees have been collected.
 final_development_fee = principal + rewards_total < withdrawal_balance && is_dev_fee_active ? rewards_total * 0.005 : 0
 
 final_bond_value = min(principal + rewards_total - final_development_fee, withdrawal_balance)
@@ -201,6 +203,7 @@ Valued without an oracle by keeping a running tally using average APR.
 
 ## Additional Information and Thoughts
 -   The exact design and mechanics Ivory Ink hinges on finalization of the post-merge withdrawal spec.
+    -   This would utilize 0x02 withdrawal credentials.
 -   Would it be possible to release something before withdrawals are unlocked?
     -   It's possible that it could be done with an upgradible Ivory Ink contract whose key is tossed after withdrawals are enabled and any subsequently necessary modifications are made.
     -   Might want to make an Ivory Ink V2 contract without the lingering upgradible pieces for gas price improvements
