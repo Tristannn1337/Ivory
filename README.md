@@ -34,6 +34,7 @@ The intentions behind the IVRY Token are:
 
 It will be important early on for the IVRY DAO to curate Ivory Bazaar using strict quality ratings in order to appropriately offset the risk that an operator could sell high principal validator bonds without the intention of ever exiting with a balance remaining, a side effect of transaction fees not being directed into a validator's balance and the potential for MEV to play into a significant portion of a validator's profit. It may be necessary to completely censor certain bond terms from appearing in the market.
 
+**TODO: Quadratic DAO?**
 
 ## 1. Ivory Ink
 Using Ivory Ink, a Node Operators create a **Validator Bond NFT** with terms they desire(principal, maturity, APR) by making their validator deposits through the Ivory Ink dApp. Their validator if forwarded into the activation queue and issues the NFT to the Node Operator. Upon validator exit and withdrawal, the validator balance is released back into Ivory Ink and portioned out between the NFT bondholder and the Node Operator. 
@@ -43,38 +44,34 @@ Using Ivory Ink, a Node Operators create a **Validator Bond NFT** with terms the
 ### Bond Terms
 -   **Principal** (ETH)
     -   The amount of ETH that the operator is raising out of 32.
-    -   Limited to increments of 0.5 ether?
-    -   Maximum of 30, minimum of 1? **TODO: Do we need limits here? Limits could be the domain of Ivory Bazaar.**
+-   **APR** (%)
+    -   The reward rate the operator expects from the network, presumably discounted by their commission rate, and guaranteed to the bondholder.
 -   **Maturity** (Blocks)
     -   The number of blocks after deposit that the operator is committing to withdrawing the validator balance by.
     -   Enforced by penalties described in the cryptoeconomics withdrawal calculations section.
-    -   Operator is given a grace period of +/- 7 days.
-    -   Maximum of 30 years, minimum of 1 month. **TODO: Do we need limits here? Limits could be the domain of Ivory Bazaar.**
-        -   May be smart to make the maximum be a function of how long the contract has existed... for example, upon deployment the maximum could be 1 year and over the course of the next 5-10 years the maximum would be interpolated to it's final value of 30. Would allow the contract to stand the test of time before allowing people to make such long term commitments.
--   **APR** (%)
-    -   The reward rate the operator expects from the network, presumably discounted by their commission rate, and guaranteed to the bondholder.
-    -   Minimum of 0.01, unbounded maximum. **TODO: Do we need limits here? Limits could be the domain of Ivory Bazaar.**
+-   **Grace Period** (Blocks)
+    -   The number of blocks before and after the maturity block where an operator is allowed to exit without penalty.
+    -   In practice, this value will be set for the operator by Ivory Bazaar and dictated by IVRY DAO.
+
 
 ### Withdrawal Calculations
 Validator balance portioning between the NFT bondholder and node operator upon validator exit and withdrawal.
+**TODO: decouple calculations from withdrawal balance. With transaction fees existing outside of the validator balance, there is insufficient protocol-level coupling to inherit.**
+
 ```Solidity
 // NOTE: This pseudocode uses floating point math for readability.
-
-// Hardcoded and based roughly on the longest expected period of nonfinality in a worst case scenario (2 weeks).
-// TODO: Should this be a bond term that is configured to a default by Ivory Bazaar?
-GRACE_PERIOD = 7 days
 
 // We only count blocks up until maturity for principal yield.
 // After maturity, all additional rewards are collected in excess_yield and allocated to the bondholder.
 principal_yield = APR / (min(total_blocks, maturity) / 1 years) * principal
 
 // If a validator balance is withdrawn past the maturity block, all additional rewards are allocated to the bondholder.
-excess_yield = max(withdrawal_balance - 32, 0) / total_blocks * max(maturity - total_blocks - GRACE_PERIOD, 0)
+excess_yield = max(withdrawal_balance - 32, 0) / total_blocks * max(maturity - total_blocks - grace_period, 0)
 
 // If a validator balance is withdrawn before maturity, a penalty is applied based on the number of blocks left until maturity
 // with a quadratic bias towards lower penalties. This penalty will not deduct from the operator's own stake unless they were
 // slashed by the network.
-normalized_time_to_maturity = max(blocks_until_maturity - GRACE_PERIOD, 0) / maturity_term
+normalized_time_to_maturity = max(blocks_until_maturity - grace_period, 0) / maturity_term
 early_withdrawal_penalty = max(withdrawal_balance - 32 - principal_yield, 0) * pow(normalized_time_to_maturity, 2)
 
 // Complete totalling of rewards for portioning between the operator, bond, and the development fee
@@ -89,10 +86,15 @@ final_bond_value = min(principal + rewards_total - final_development_fee, withdr
 final_operator_balance = withdrawal_balance - final_bond_value
 ```
 
+
 ### Bond Renewal
--   Renewal proposals may only be put up for a vote by the operator.
--   May only occur before `maturity - GRACE_PERIOD - 14 days` and pass before `maturity - GRACE_PERIOD`.
--   A bondholder who rejects the proposal may be bought out by the node operator.
+-   All bonds default to being `renewable`.
+-   A bondholder who wishes to liquidate must submit a transaction to change the NFT's state to `unrenewable`.
+-   Bond state is locked starting at `maturity - grace_period` and may only unlock after `maturity + grace_period` if the locked state is `renewable`. 
+-   An operator may, at any time, choose to recover the NFT by paying for it directly. The recovery cost is equal to...
+
+-   There's nothing wrong with an operator proposing a renewal and immediately buying out all the bondholders.
+-   A bondholder who rejects the proposal may be bought out by the node operator for the expected value at maturity of the bondholder's portion.
 
 
 ## 2. Ivory Bazaar
@@ -112,6 +114,15 @@ Surface fundamental market demands, create a platform for operator reputation, g
     -   Bond fractions can be staked to force liquidation. 
     -   Without a bond fraction being staked, the operator may trigger an automatic renewal.
     -   Unstaked fractions may still get liquidated and liquidated fractions sit idle until claimed.
+-   Term Curation
+    -   Principal limited to increments of 0.5 ether for listing simplicity?
+    -   Principal maximum of 30, minimum of 1? Needs to be based on analysis of validator balance value over time given projected EV.
+    -   APR Minimum of 0.01, unbounded maximum.
+    -   Grace period of +/- 7 days, roughly based on the amount of time expected in a state of non-finality.
+    -   Maturity maximum of 30 years, minimum of 1 month.
+        -   Make the maximum be a function of how long the contract has existed... for example, upon deployment the maximum could be 1 year and over the course of the next 5-10 years the maximum would be interpolated to it's final value of 30. Would allow the contract to stand the test of time before allowing people to make such long term commitments.
+    -   More complex relationships between terms will be necessary... a bond with a low principal may be allowed longer maturity while high principal bonds require short maturity in order to satisfy EV projections relative to stake.
+
 
 
 ## 3. Ivory Parade
@@ -144,6 +155,8 @@ Valued without an oracle by keeping a running tally using average APR.
     
     total_principal += bond_principal
     token_value += average_apr / ((last_update_block - current_block) / 1 year) * total_principal
+
+    // TODO: try to switch from a loop that modifies state to a couple tallies and blockstamps + don't forget that multiple transactions could happen in same block.
     for each depositor in pending_depositors while bond_principal > 0
         match_amount = min(depositor.ether_balance, bond_principal)
         depositor.token_balance += match_amount / token_value
