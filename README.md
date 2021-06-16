@@ -48,7 +48,7 @@ Using Ivory Ink, a Node Operators create a **Validator Bond NFT** with terms the
     -   The reward rate the operator expects from the network, presumably discounted by their commission rate, and guaranteed to the bondholder.
 -   **Maturity** (Blocks)
     -   The number of blocks after deposit that the operator is committing to withdrawing the validator balance by.
-    -   Enforced by penalties described in the cryptoeconomics withdrawal calculations section.
+    -   Enforced by penalties described in the withdrawal calculations section.
 -   **Grace Period** (Blocks)
     -   The number of blocks before and after the maturity block where an operator is allowed to exit without penalty.
     -   In practice, this value will be set for the operator by Ivory Bazaar and dictated by IVRY DAO.
