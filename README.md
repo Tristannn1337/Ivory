@@ -32,12 +32,12 @@ The intentions behind the IVRY Token are:
 -   **Governance**: Approval power over smart contract upgrades, IVRY spending, IVRY buybacks, and fee management.
 -   **Administration**: Trigger emergency procedures in time sensitive situations to make time for governance to respond.
 
-It will be important early on for the IVRY DAO to curate Ivory Bazaar using strict quality ratings in order to appropriately offset the risk that an operator could sell high principal validator bonds without the intention of ever exiting with a balance remaining, a side effect of transaction fees not being directed into a validator's balance and the potential for MEV to play into a significant portion of a validator's profit. It may be necessary to completely censor certain bond terms from appearing in the market.
+It will be important early on for the IVRY DAO to curate Ivory Bazaar using strict quality ratings in order to appropriately offset the risk that an operator could sell high principal validator bonds without the intention of ever exiting with a balance remaining, a side effect of transaction fees not being directed into a validator's balance and the potential for MEV to play into a significant portion of a validator's profit. It may be necessary to completely censor certain bond terms from appearing in Ivory Bazaar.
 
 **TODO: Quadratic DAO?**
 
 ## 1. Ivory Ink
-Using Ivory Ink, a Node Operators create a **Validator Bond NFT** with terms they desire(principal, maturity, APR) by making their validator deposits through the Ivory Ink dApp. Their validator if forwarded into the activation queue and issues the NFT to the Node Operator. Upon validator exit and withdrawal, the validator balance is released back into Ivory Ink and portioned out between the NFT bondholder and the Node Operator. 
+Using Ivory Ink, a Node Operators create a **Validator Bond NFT** with terms they desire(principal, maturity, APR) by making their validator deposits through the Ivory Ink dApp. Their validator is forwarded into the activation queue and the bond NFT is issued to the Node Operator. Upon validator exit and withdrawal, the validator balance is released back into Ivory Ink and portioned out between the NFT bondholder and the Node Operator. 
 -   To enforce liquidity for the bondholder, Ivory Ink penalizes operators who exit their bonded validator too early or too late.
 -   To reduce validator churn on the network, bond terms may be renewed by the bondholder before maturity.
 
