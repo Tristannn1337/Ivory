@@ -15,7 +15,7 @@ Compared to existing pools, the Ivory Protocol's goal is to...
 
 ## Overview
 Compared to the typical service-oriented relationship that most if not all existing pools have with stakers, the Ivory Protocol reframes the relationship as operators raising money by issuing bonds to investors collateralized by their withdrawal balance.
-Central to the design of the Ivory Protocol is the **Validator Bond NFT**, a tokenized cryptoeconomic agreement node operators can enter into for raising funds to run more validators.
+Central to the design of the Ivory Protocol is the **Validator Bond NFT**, a tokenized cryptoeconomic agreement that node operators can enter into for raising funds to run more validators.
 
 The protocol is made up of three parts:
 1. The **issuing and redeeming** of Validator Bonds with **Ivory Ink**.
