@@ -127,7 +127,7 @@ Surface fundamental market demands, create a platform for operator reputation, g
 ## 3. Ivory Parade
 Tokenized fund managed by the IVRY DAO for casual investors and easy integration with the greater DeFi ecosystem. This section describes what could be the first iteration, but more ideas for future iterations are listed in the "More Bond Product Ideas" section.
 
-Operator and staker interaction with Ivory Parade from a UX perspective looks almost identical to an Ivory Bazaar Buy/Sell order. Stakers can deposit directly into the fund and stake their tokens for liquidity. Operators can sell bonds directly to the fund and trigger renewal votes when there are no tokens outstanding tokens staked for liquidity. Unlike an Ivory Bazaar Buy/Sell order, stakers may also stake their tokens to collect underwriter fees.
+Operator and staker interaction with Ivory Parade from a UX perspective looks almost identical to an Ivory Bazaar Buy/Sell order. Stakers can deposit directly into the fund and stake their tokens for liquidity. Operators can sell bonds directly to the fund and trigger renewal votes when there are no outstanding tokens staked for liquidity. Unlike an Ivory Bazaar Buy/Sell order, stakers may also stake their tokens to collect underwriter fees.
 
 ### Managed
 The IVRY DAO is responsible for managing the fund by...
