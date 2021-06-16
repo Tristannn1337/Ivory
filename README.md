@@ -39,7 +39,7 @@ It will be important early on for the IVRY DAO to curate Ivory Bazaar using stri
 ## 1. Ivory Ink
 Using Ivory Ink, a Node Operators create a **Validator Bond NFT** with terms they desire(principal, maturity, APR) by making their validator deposits through the Ivory Ink dApp. Their validator is forwarded into the activation queue and the bond NFT is issued to the Node Operator. Upon validator exit and withdrawal, the validator balance is released back into Ivory Ink and portioned out between the NFT bondholder and the Node Operator. 
 -   To enforce liquidity for the bondholder, Ivory Ink penalizes operators who exit their bonded validator too early or too late.
--   To reduce validator churn on the network, bond terms may be renewed by the bondholder before maturity.
+-   To reduce validator churn on the network, bond terms may be renewed by the operator before maturity if the bondholder allows.
 
 ### Bond Terms
 -   **Principal** (ETH)
