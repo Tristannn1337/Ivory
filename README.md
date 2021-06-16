@@ -93,10 +93,7 @@ final_operator_balance = withdrawal_balance - final_bond_value
 -   All bonds default to being `renewable`.
 -   A bondholder who wishes to liquidate must submit a transaction to change the NFT's state to `unrenewable`.
 -   Bond state is locked starting at `maturity - grace_period` and may only unlock after `maturity + grace_period` if the locked state is `renewable`. 
--   An operator may, at any time, choose to recover the NFT by paying for it directly. The recovery cost is equal to...
-
--   There's nothing wrong with an operator proposing a renewal and immediately buying out all the bondholders.
--   A bondholder who rejects the proposal may be bought out by the node operator for the expected value at maturity of the bondholder's portion.
+-   (TODO) An operator may, at any time, choose to recover the NFT by paying for it directly. The recovery cost is equal to...
 
 
 ## 2. Ivory Bazaar
