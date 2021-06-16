@@ -24,7 +24,7 @@ The protocol is made up of three parts:
 
 Ivory Ink involves no DAO, no protocol token, the contracts are not upgradable, and is designed with the intention of being the minimum viable protocol around which Ivory Bazaar and Ivory Parade may be built. By creating this separation between Ivory Ink and the rest of the protocol, we create a secure foundational commitment to the ecosystem and place fundamental limitations on the power that any member or developer has.
 
-Ivory Bazaar and Ivory Parade will involve the IVRY Token. This token will grant DAO membership , a protocol token, and upgradable contracts.
+Ivory Bazaar and Ivory Parade will involve the IVRY Token.
 The intentions behind the IVRY Token are:
 -   **Reputation**: Operators may pay IVRY to create and update their Ivory Bazaar NFT profile.
 -   **Curation**: Adjust bond-term-derived quality ratings in Ivory Bazaar and Ivory Parade Fund Management.
