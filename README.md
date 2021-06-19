@@ -46,7 +46,7 @@ Using Ivory Ink, a Node Operators create a **Validator Bond NFT** with terms the
     -   The amount of ETH that the operator is raising out of 32.
 -   **APR** (%)
     -   The minimum reward rate guaranteed to the bondholder.
--   **Operator Fee**
+-   **Operator Fee** (%)
     -   The fee that the operator takes from the rewards portioned to bondholder, limited by the APR.
     -   A fee **equal to 100%** is a **Fixed Rate** bond.
     -   A fee **less than 100%** is a **Variable Rate** bond.
