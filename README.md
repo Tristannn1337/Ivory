@@ -97,7 +97,7 @@ var final_development_fee = principal + bondholder_yield < withdrawal_balance &&
 
 var final_bond_value = min(principal + bondholder_yield - final_development_fee, withdrawal_balance)
 
-var final_operator_balance = max(withdrawal_balance - final_bond_value - final_development_fee, 0)
+var final_operator_balance = withdrawal_balance - final_bond_value - final_development_fee
 ```
 
 
