@@ -45,7 +45,11 @@ Using Ivory Ink, a Node Operators create a **Validator Bond NFT** with terms the
 -   **Principal** (ETH)
     -   The amount of ETH that the operator is raising out of 32.
 -   **APR** (%)
-    -   The reward rate the operator expects from the network, presumably discounted by their commission rate, and guaranteed to the bondholder.
+    -   The minimum reward rate guaranteed to the bondholder.
+-   **Operator Fee**
+    -   The fee that the operator takes from the rewards portioned to bondholder, limited by the APR.
+    -   A fee **equal to 100%** is a **Fixed Rate** bond.
+    -   A fee **less than 100%** is a **Variable Rate** bond.
 -   **Maturity** (Blocks)
     -   The number of blocks after deposit that the operator is committing to withdrawing the validator balance by.
     -   Enforced by penalties described in the withdrawal calculations section.
@@ -60,27 +64,37 @@ Validator balance portioning between the NFT bondholder and node operator upon v
 ```Solidity
 // NOTE: This pseudocode uses floating point math for readability.
 
-// We only count blocks up until maturity for principal yield.
+reward_balance = max(withdrawal_balance - 32, 0)
+
+// We only count blocks up until maturity for fixed yield.
 // After maturity, all additional rewards are collected in excess_yield and allocated to the bondholder.
-principal_yield = APR / (min(total_blocks, maturity) / 1 years) * principal
+fixed_yield = clamp(apr, 0, 1) / (min(total_blocks, maturity) / 1 years) * principal
 
 // If a validator balance is withdrawn past the maturity block, all additional rewards are allocated to the bondholder.
 // Determined by taking average rewards per block mulultipied by number of blocks past maturity
 // At a minimum, these rewards include attestation rewards, proposal rewards, and some transaction fees (0x02).
-// MEV may also be included if the operator choses. Incentive to do so should come from the Ivory Bazaar reputation system if possible. (flashbots verified?)
-excess_yield = max(withdrawal_balance - 32, 0) / total_blocks * max(maturity - total_blocks - grace_period, 0)
+excess_yield = reward_balance / total_blocks * max(maturity - total_blocks - grace_period, 0)
+
+// We only count blocks up until maturity for variable yield.
+// After maturity, all additional rewards are collected in excess_yield and allocated to the bondholder.
+variable_yield = (reward_balance - excess_yield) * (principal / 32)
+variable_yield -= principal_rewards * clamp(operator_fee, 0, 1)
+
+// The bondholder's yield has a floor of the fixed yield as calculated purely from APR,
+// and a ceiling of the variable yield as calculated from a portioned out reward balance.
+bondholder_yield = max(variable_yield, fixed_yield);
 
 // If a validator balance is withdrawn before maturity, a penalty is applied based on the number of blocks left until maturity
 // with a quadratic bias towards lower penalties. This penalty will not deduct from the operator's own stake unless they were
 // slashed by the network.
-_normalized_time_to_maturity = max(blocks_until_maturity - grace_period, 0) / maturity_term
-early_withdrawal_penalty = max(withdrawal_balance - 32 - principal_yield, 0) * pow(_normalized_time_to_maturity, 2)
+normalized_time_to_maturity = max(blocks_until_maturity - grace_period, 0) / maturity_term
+early_withdrawal_penalty = max(reward_balance - bondholder_yield, 0) * pow(normalized_time_to_maturity, 2)
 
 // Complete totalling of rewards for portioning between the operator, bond, and the development fee
-rewards_total = principal_yield + excess_yield + early_withdrawal_penalty
+rewards_total = bondholder_yield + excess_yield + early_withdrawal_penalty
 
 // A 0.5% development fee is taken out as long as the bond doesn't fail to deliver when is_dev_fee_active.
-// is_dev_fee_active when less than 30 years have passed since contract deployment and less than 100,000 ether in fees have been collected.
+// is_dev_fee_active when less than 30 years have passed since deployment and less than 100,000 ether has been collected.
 final_development_fee = principal + rewards_total < withdrawal_balance && is_dev_fee_active ? rewards_total * 0.005 : 0
 
 final_bond_value = min(principal + rewards_total - final_development_fee, withdrawal_balance)
