@@ -61,7 +61,7 @@ Using Ivory Ink, a Node Operators create a **Validator Bond NFT** with terms the
 ### Withdrawal Calculations
 Validator balance portioning between the NFT bondholder and node operator upon validator exit and withdrawal.
 
-```Solidity
+```Javascript
 // NOTE: This pseudocode uses floating point math for readability.
 
 reward_balance = max(withdrawal_balance - 32, 0)
@@ -82,24 +82,22 @@ variable_yield -= principal_rewards * clamp(operator_fee, 0, 1)
 
 // The bondholder's yield has a floor of the fixed yield as calculated purely from APR,
 // and a ceiling of the variable yield as calculated from a portioned out reward balance.
-bondholder_yield = max(variable_yield, fixed_yield);
+bondholder_yield = max(variable_yield, fixed_yield) + excess_yield;
 
 // If a validator balance is withdrawn before maturity, a penalty is applied based on the number of blocks left until maturity
 // with a quadratic bias towards lower penalties. This penalty will not deduct from the operator's own stake unless they were
 // slashed by the network.
 normalized_time_to_maturity = max(blocks_until_maturity - grace_period, 0) / maturity_term
 early_withdrawal_penalty = max(reward_balance - bondholder_yield, 0) * pow(normalized_time_to_maturity, 2)
-
-// Complete totalling of rewards for portioning between the operator, bond, and the development fee
-rewards_total = bondholder_yield + excess_yield + early_withdrawal_penalty
+bondholder_yield += early_withdrawal_penalty
 
 // A 0.5% development fee is taken out as long as the bond doesn't fail to deliver when is_dev_fee_active.
 // is_dev_fee_active when less than 30 years have passed since deployment and less than 100,000 ether has been collected.
-final_development_fee = principal + rewards_total < withdrawal_balance && is_dev_fee_active ? rewards_total * 0.005 : 0
+final_development_fee = principal + bondholder_yield < withdrawal_balance && is_dev_fee_active ? bondholder_yield * 0.005 : 0
 
-final_bond_value = min(principal + rewards_total - final_development_fee, withdrawal_balance)
+final_bond_value = min(principal + bondholder_yield - final_development_fee, withdrawal_balance)
 
-final_operator_balance = withdrawal_balance - final_bond_value
+final_operator_balance = withdrawal_balance - final_bond_value - final_development_fee
 ```
 
 
