@@ -67,21 +67,16 @@ Validator balance portioning between the NFT bondholder and node operator upon v
 var reward_balance = max(withdrawal_balance - 32, 0)
 
 // We only count blocks up until maturity for fixed yield.
-// After maturity, all additional rewards are collected in excess_yield and allocated to the bondholder.
 var fixed_yield = clamp(apr, 0, 1) / (min(total_blocks, maturity) / 1 years) * principal
 
 // If a validator balance is withdrawn past the maturity block, all additional rewards are allocated to the bondholder.
-// Determined by taking average rewards per block mulultipied by number of blocks past maturity
 // At a minimum, these rewards include attestation rewards, proposal rewards, and some transaction fees (0x02).
 var excess_yield = reward_balance / total_blocks * max(maturity - total_blocks - grace_period, 0)
 
 // We only count blocks up until maturity for variable yield.
-// After maturity, all additional rewards are collected in excess_yield and allocated to the bondholder.
 var variable_yield = (reward_balance - excess_yield) * (principal / 32)
 variable_yield -= principal_rewards * clamp(operator_fee, 0, 1)
 
-// The bondholder's yield has a floor of the fixed yield as calculated purely from APR,
-// and a ceiling of the variable yield as calculated from a portioned out reward balance.
 var bondholder_yield = max(variable_yield, fixed_yield) + excess_yield;
 
 // If a validator balance is withdrawn before maturity, a penalty is applied based on the number of blocks left until maturity
